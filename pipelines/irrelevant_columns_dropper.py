@@ -27,7 +27,7 @@ class IrrelevantColumnsDropper(TransformerMixin):
     def transform(
         self, X: DataFrame, y: DataFrame = None, **kwargs
     ) -> Union[DataFrame, Tuple[DataFrame, DataFrame]]:
-        X = X.drop(self.COLUMNS_TO_DROP)
+        X = X.drop(columns=self.COLUMNS_TO_DROP)
         if y:
             return X, y
         else:

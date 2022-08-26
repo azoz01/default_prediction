@@ -5,11 +5,10 @@ from pipelines.irrelevant_columns_dropper import IrrelevantColumnsDropper
 
 @pytest.fixture()
 def application_data():
-    return pd.DataFrame(
+    return pd.DataFrame.from_dict(
         data={
             "0": {
                 "SK_ID_CURR": 100002,
-                "TARGET": 1,
                 "NAME_CONTRACT_TYPE": "Cash loans",
                 "CODE_GENDER": "M",
                 "FLAG_OWN_CAR": "N",
@@ -131,16 +130,16 @@ def application_data():
                 "AMT_REQ_CREDIT_BUREAU_QRT": 0.0,
                 "AMT_REQ_CREDIT_BUREAU_YEAR": 1.0,
             }
-        }
+        },
+        orient="index",
     )
 
 
 @pytest.fixture()
 def expected_df():
-    return pd.DataFrame(
+    return pd.DataFrame.from_dict(
         data={
             "0": {
-                "TARGET": 1,
                 "NAME_CONTRACT_TYPE": "Cash loans",
                 "FLAG_OWN_CAR": "N",
                 "FLAG_OWN_REALTY": "Y",
@@ -250,7 +249,8 @@ def expected_df():
                 "FLAG_DOCUMENT_20": 0,
                 "FLAG_DOCUMENT_21": 0,
             }
-        }
+        },
+        orient="index",
     )
 
 
