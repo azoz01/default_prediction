@@ -2,3 +2,4 @@
 data/raw/*
 !.keep
 *.parquet
+*__pycache__*
