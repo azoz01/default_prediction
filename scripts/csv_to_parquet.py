@@ -1,11 +1,16 @@
-from typing import List
-import pandas as pd
+import sys
 import os
+
+sys.path.append(os.path.abspath(os.getcwd()))
+
+import pandas as pd
+
+import utils.paths as paths
 
 if __name__ == "__main__":
     PATHS_WITHOUT_EXTENSIONS: list[str] = [
-        os.path.join("data", "raw", "application_data"),
-        os.path.join("data", "raw", "previous_application"),
+        os.path.join(paths.RAW_DATA_PATH, "application_data"),
+        os.path.join(paths.RAW_DATA_PATH, "raw", "previous_application"),
     ]
     in_paths: list[str] = [path + ".csv" for path in PATHS_WITHOUT_EXTENSIONS]
     out_paths: list[str] = [
