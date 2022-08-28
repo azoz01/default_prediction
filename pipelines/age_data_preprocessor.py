@@ -17,6 +17,7 @@ class AgeDataPreprocessor(TransformerMixin):
         X = self._process_days_birth(X)
         X = self._process_days_employed(X)
         X = self._process_days_registration(X)
+        X = self._process_own_car_age(X)
         return X
 
     def _process_days_birth(self, X: DataFrame) -> DataFrame:
@@ -36,8 +37,6 @@ class AgeDataPreprocessor(TransformerMixin):
         )
         X["DAYS_BIRTH"] = age_col_segmented
         X = X.rename(columns={"DAYS_BIRTH": "AGE"})
-        # X = X.drop(columns=["DAYS_BIRTH"])
-        # X = X.assign(AGE=age_col_segmented)
         return X
 
     def _process_days_employed(self, X: DataFrame) -> DataFrame:
@@ -49,8 +48,6 @@ class AgeDataPreprocessor(TransformerMixin):
         )
         X["DAYS_EMPLOYED"] = months_employed_col_segmented
         X = X.rename(columns={"DAYS_EMPLOYED": "MONTHS_EMPLOYED"})
-        # X = X.drop(columns=["DAYS_EMPLOYED"])
-        # X = X.assign(MONTHS_EMPLOYED=months_employed_col_segmented)
         return X
 
     def _process_days_registration(self, X: DataFrame) -> DataFrame:
@@ -62,6 +59,15 @@ class AgeDataPreprocessor(TransformerMixin):
         )
         X["DAYS_REGISTRATION"] = years_registration_col_segmented
         X = X.rename(columns={"DAYS_REGISTRATION": "YEARS_REGISTRATION"})
-        # X = X.drop(columns=["DAYS_REGISTRATION"])
-        # X = X.assign(YEARS_REGISTRATION=years_registration_col_segmented)
+        return X
+
+    def _process_own_car_age(self, X: DataFrame) -> DataFrame:
+        own_car_age_col: Series = X["OWN_CAR_AGE"]
+        own_car_age_col = own_car_age_col.fillna(-1)
+        own_car_age_col_segmented: Series = pd.cut(
+            own_car_age_col,
+            bins=[float("-inf"), 0, 3, 6, 9, float("inf")],
+            labels=["Undefined", "3<=", "3<&<=6", "6<&<=9", "9<"],
+        )
+        X["OWN_CAR_AGE"] = own_car_age_col_segmented
         return X
