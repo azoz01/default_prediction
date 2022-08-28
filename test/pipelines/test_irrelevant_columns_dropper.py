@@ -257,5 +257,5 @@ def expected_df():
 def test_transform(application_data, expected_df):
     transformer = IrrelevantColumnsDropper()
     actual_df = transformer.transform(application_data)
-    pd.testing.assert_frame_equal(actual_df, expected_df, check_like=True)
+    pd.testing.assert_frame_equal(actual_df, expected_df)
 
