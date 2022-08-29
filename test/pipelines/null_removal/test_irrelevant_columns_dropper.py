@@ -1,6 +1,9 @@
 import pytest
 import pandas as pd
-from pipelines.irrelevant_columns_dropper import IrrelevantColumnsDropper
+from pipelines.null_removal.irrelevant_columns_dropper import (
+    IrrelevantColumnsDropper,
+)
+from pipelines.constants import COLUMNS_TO_DROP
 
 
 @pytest.fixture()
@@ -255,7 +258,7 @@ def expected_df():
 
 
 def test_transform(application_data, expected_df):
-    transformer = IrrelevantColumnsDropper()
+    transformer = IrrelevantColumnsDropper(columns_to_drop=COLUMNS_TO_DROP)
     actual_df = transformer.transform(application_data)
     pd.testing.assert_frame_equal(actual_df, expected_df)
 

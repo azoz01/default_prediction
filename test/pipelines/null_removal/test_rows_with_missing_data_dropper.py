@@ -1,6 +1,9 @@
 import pytest
 import pandas as pd
-from pipelines.rows_with_missing_data_dropper import RowsWithMissingDataDropper
+from pipelines.null_removal.rows_with_missing_data_dropper import (
+    RowsWithMissingDataDropper,
+)
+from pipelines.constants import COLUMNS_TO_FILTER_ROWS_WITH_NULLS
 
 
 @pytest.fixture()
@@ -659,7 +662,9 @@ def expected_data_y():
 def test_transform(
     application_data_X, application_data_y, expected_data_X, expected_data_y
 ):
-    transformer = RowsWithMissingDataDropper()
+    transformer = RowsWithMissingDataDropper(
+        columns_to_filter_by=COLUMNS_TO_FILTER_ROWS_WITH_NULLS
+    )
     actual_data_X, actual_data_y = transformer.transform(
         X=application_data_X, y=application_data_y
     )
