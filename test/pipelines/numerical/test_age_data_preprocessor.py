@@ -1,6 +1,6 @@
 import pytest
 import pandas as pd
-from pipelines.age_data_preprocessor import AgeDataPreprocessor
+from pipelines.numerical.age_data_preprocessor import AgeDataPreprocessor
 
 
 @pytest.fixture
@@ -76,7 +76,7 @@ def input_transform_df():
             "DAYS_BIRTH": [366, -7400, -11104, -16080, -19365, -20460,],
             "DAYS_EMPLOYED": [31, -155, -650, -1524, -2432, 31],
             "DAYS_REGISTRATION": [1000, -824, -3459, -6524, -10240, 1000],
-            "OWN_CAR_AGE": [None, -1, 2, 5, 9, 12],
+            "OWN_CAR_AGE": [-1, -1, 2, 5, 9, 12],
             "DUMMY_COLUMN": [10, 9, 8, 7, 6, 5],
         },
         orient="columns",
@@ -127,7 +127,7 @@ def expected_transformed_df():
 
 @pytest.fixture
 def df_own_car_age():
-    return pd.DataFrame({"OWN_CAR_AGE": [None, -1, 2, 5, 9, 12]})
+    return pd.DataFrame({"OWN_CAR_AGE": [-1, -1, 2, 5, 9, 12]})
 
 
 @pytest.fixture

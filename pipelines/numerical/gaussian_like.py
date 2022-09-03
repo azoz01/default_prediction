@@ -1,24 +1,21 @@
-import numpy as np
-from typing import Any, Tuple, Union
+from typing import Tuple, Union
 from pandas import DataFrame
 from sklearn.base import TransformerMixin
 from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import PowerTransformer
 
 
-class ModeImputer(TransformerMixin):
+class ToGaussianTransformer(TransformerMixin):
     def __init__(
-        self, columns_to_impute: list[str], missing_values: Any = np.nan
+        self, columns_to_transform: list[str],
     ):
-        self.columns_to_impute = columns_to_impute
+        self.columns_to_transform = columns_to_transform
         self.column_transformer: ColumnTransformer = ColumnTransformer(
             transformers=[
                 (
-                    "mode_imputer",
-                    SimpleImputer(
-                        strategy="most_frequent", missing_values=missing_values
-                    ),
-                    self.columns_to_impute,
+                    "gaussian_like_transformer",
+                    PowerTransformer(method="yeo-johnson", standardize=True),
+                    self.columns_to_transform,
                 )
             ],
             remainder="drop",
@@ -31,8 +28,8 @@ class ModeImputer(TransformerMixin):
     def transform(
         self, X: DataFrame, y: DataFrame = None, **kwargs
     ) -> Union[DataFrame, Tuple[DataFrame, DataFrame]]:
-        X = X.copy()
-        X[self.columns_to_impute] = self.column_transformer.transform(X)
+        X[self.columns_to_transform] = self.column_transformer.transform(X)
         if y is not None:
             return X, y
         return X
+

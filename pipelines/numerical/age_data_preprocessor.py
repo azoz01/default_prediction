@@ -14,6 +14,7 @@ class AgeDataPreprocessor(TransformerMixin):
         return X
 
     def _process_age_columns(self, X: DataFrame) -> DataFrame:
+        X = X.copy()
         X = self._process_days_birth(X)
         X = self._process_days_employed(X)
         X = self._process_days_registration(X)
@@ -63,7 +64,6 @@ class AgeDataPreprocessor(TransformerMixin):
 
     def _process_own_car_age(self, X: DataFrame) -> DataFrame:
         own_car_age_col: Series = X["OWN_CAR_AGE"]
-        own_car_age_col = own_car_age_col.fillna(-1)
         own_car_age_col_segmented: Series = pd.cut(
             own_car_age_col,
             bins=[float("-inf"), 0, 3, 6, 9, float("inf")],

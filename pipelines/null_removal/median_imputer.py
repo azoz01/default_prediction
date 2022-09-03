@@ -31,6 +31,7 @@ class MedianImputer(TransformerMixin):
     def transform(
         self, X: DataFrame, y: DataFrame = None, **kwargs
     ) -> Union[DataFrame, Tuple[DataFrame, DataFrame]]:
+        X = X.copy()
         X[self.columns_to_impute] = self.column_transformer.transform(X)
         if y is not None:
             return X, y
