@@ -153,7 +153,8 @@ CATEGORICAL_COLUMNS: list[str] = [
     "MONTHS_EMPLOYED",
     "AGE",
     "YEARS_REGISTRATION",
-    "OWN_CAR_AGE" "NAME_CONTRACT_TYPE",
+    "OWN_CAR_AGE",
+    "NAME_CONTRACT_TYPE",
     "NAME_INCOME_TYPE",
     "NAME_EDUCATION_TYPE",
     "NAME_FAMILY_STATUS",
@@ -166,6 +167,7 @@ CATEGORICAL_COLUMNS: list[str] = [
     "EMERGENCYSTATE_MODE",
 ]
 
+# TODO: in future remove from one-hot and convert to numerical
 ONE_HOT_ENCODED: list[str] = [
     "FLAG_DOCUMENT_2",
     "FLAG_DOCUMENT_3",

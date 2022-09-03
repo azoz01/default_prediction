@@ -4,7 +4,7 @@ import os
 sys.path.append(os.path.abspath(os.getcwd()))
 
 import pandas as pd
-from pipelines.built.numerical_pipeline import NumericalPipeline
+from pipelines.built.numerical_transformations import NumericalTransformations
 from pipelines.constants import *
 import utils.paths as paths
 import pipelines.constants as constants
@@ -24,7 +24,7 @@ def main():
     )
 
     pipeline_logger.info("Fitting pipeline")
-    numerical_pipeline = NumericalPipeline()
+    numerical_pipeline = NumericalTransformations()
     numerical_pipeline.fit(X_train)
     pipeline_logger.info("Transforming train sample")
     X_train_transformed = numerical_pipeline.transform(X_train)
@@ -37,6 +37,12 @@ def main():
     ), "Train sample contains nulls"
     assert (
         X_test_transformed.isna().sum().sum() == 0
+    ), "Test sample contains nulls"
+    assert (
+        X_train_transformed.isnull().sum().sum() == 0
+    ), "Train sample contains nulls"
+    assert (
+        X_test_transformed.isnull().sum().sum() == 0
     ), "Test sample contains nulls"
 
     pipeline_logger.info("Checking for zero mean in numerical data")

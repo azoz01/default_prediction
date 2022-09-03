@@ -7,6 +7,9 @@ NO_MISSING_DATA_PATH = os.path.join(ROOT_PATH, "data", "no_missing")
 NUMERICAL_TRANSFORMED_DATA_PATH = os.path.join(
     ROOT_PATH, "data", "numerical_transformed"
 )
+CATEGORICAL_TRANSFORMED_DATA_PATH = os.path.join(
+    ROOT_PATH, "data", "categorical_transformed"
+)
 SERIALIZED_PATH = os.path.join(ROOT_PATH, "serialized")
 
 
