@@ -38,6 +38,8 @@ def main():
     pipeline_logger.info(
         f"Saving output data to: {paths.CATEGORICAL_TRANSFORMED_DATA_PATH}"
     )
+    if not os.path.exists(paths.CATEGORICAL_TRANSFORMED_DATA_PATH):
+        os.mkdir(paths.CATEGORICAL_TRANSFORMED_DATA_PATH)
     X_train_transformed.to_parquet(
         os.path.join(
             paths.CATEGORICAL_TRANSFORMED_DATA_PATH, "X_train.parquet"

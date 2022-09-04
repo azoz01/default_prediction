@@ -11,7 +11,7 @@ from utils.logging import pipeline_logger
 
 
 def main():
-
+    pipeline_logger.info("Started missing data removal pipeline")
     pipeline_logger.info(f"Reading input data from {paths.SPLITTED_DATA_PATH}")
     X_train = pd.read_parquet(
         os.path.join(paths.SPLITTED_DATA_PATH, "X_train.parquet")
@@ -44,6 +44,8 @@ def main():
     pipeline_logger.info(
         f"Saving output data to: {paths.NO_MISSING_DATA_PATH}"
     )
+    if not os.path.exists(paths.NO_MISSING_DATA_PATH):
+        os.mkdir(paths.NO_MISSING_DATA_PATH)
     X_train_transformed.to_parquet(
         os.path.join(paths.NO_MISSING_DATA_PATH, "X_train.parquet")
     )

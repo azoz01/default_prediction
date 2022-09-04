@@ -12,7 +12,7 @@ from utils.logging import pipeline_logger
 
 
 def main():
-
+    pipeline_logger.info("started numerical transformations")
     pipeline_logger.info(
         f"Reading input data from {paths.NO_MISSING_DATA_PATH}"
     )
@@ -40,6 +40,8 @@ def main():
     pipeline_logger.info(
         f"Saving output data to: {paths.NUMERICAL_TRANSFORMED_DATA_PATH}"
     )
+    if not os.path.exists(paths.NUMERICAL_TRANSFORMED_DATA_PATH):
+        os.mkdir(paths.NUMERICAL_TRANSFORMED_DATA_PATH)
     X_train_transformed.to_parquet(
         os.path.join(paths.NUMERICAL_TRANSFORMED_DATA_PATH, "X_train.parquet")
     )

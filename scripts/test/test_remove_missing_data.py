@@ -10,6 +10,7 @@ from utils.logging import pipeline_logger
 
 
 def main():
+    pipeline_logger.info("Started test of missing data removal pipeline")
     pipeline_logger.info(f"Reading input data from {paths.SPLITTED_DATA_PATH}")
     X_train = pd.read_parquet(
         os.path.join(paths.SPLITTED_DATA_PATH, "X_train.parquet")

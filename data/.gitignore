@@ -1,0 +1,7 @@
+/splitted
+/no_missing
+/numerical_transformed
+/categorical_transformed
+/pipelines/serialized/categorical_pipeline.pkl
+/pipelines/serialized/missing_data_removal_pipeline.pkl
+/pipelines/serialized/numerical_pipeline.pkl

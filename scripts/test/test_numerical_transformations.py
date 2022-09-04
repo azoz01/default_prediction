@@ -12,7 +12,7 @@ from utils.logging import pipeline_logger
 
 
 def main():
-
+    pipeline_logger.info("Started test of numerical transformations")
     pipeline_logger.info(
         f"Reading input data from {paths.NO_MISSING_DATA_PATH}"
     )

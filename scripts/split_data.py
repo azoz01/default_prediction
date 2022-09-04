@@ -11,6 +11,7 @@ import pandas as pd
 
 
 def main():
+    pipeline_logger.info("Started splitting data pipeline")
     pipeline_logger.info(f"Loading raw data from {paths.RAW_DATA_PATH}")
     raw_data = pd.read_parquet(
         os.path.join(paths.RAW_DATA_PATH, "application_data.parquet")
@@ -26,6 +27,8 @@ def main():
     pipeline_logger.info(
         f"Saving splitted data into {paths.SPLITTED_DATA_PATH}"
     )
+    if not os.path.exists(paths.SPLITTED_DATA_PATH):
+        os.mkdir(paths.SPLITTED_DATA_PATH)
     X_train.to_parquet(
         os.path.join(paths.SPLITTED_DATA_PATH, "X_train.parquet")
     )

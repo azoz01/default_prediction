@@ -1,0 +1,80 @@
+schema: '2.0'
+stages:
+  split_data:
+    cmd: python scripts/split_data.py
+    deps:
+    - path: data/raw/
+      md5: 471b0efdf22136513c2eca6a76f41cf0.dir
+      size: 85166940
+      nfiles: 6
+    - path: scripts/split_data.py
+      md5: 4b705af745724817f55c179287e91da2
+      size: 1326
+    outs:
+    - path: data/splitted/
+      md5: 50c1d8673b123186370d31892930e5a7.dir
+      size: 27635666
+      nfiles: 4
+  remove_missing_data:
+    cmd: python scripts/test/test_remove_missing_data.py && python scripts/remove_missing_data.py
+    deps:
+    - path: data/splitted/
+      md5: 50c1d8673b123186370d31892930e5a7.dir
+      size: 27635666
+      nfiles: 4
+    - path: scripts/remove_missing_data.py
+      md5: fec1697da2a8f53f3338beb3b2b7c716
+      size: 2324
+    - path: scripts/test/test_numerical_transformations.py
+      md5: 06ddb7702dca16b84e90e251da719854
+      size: 2594
+    outs:
+    - path: data/no_missing/
+      md5: a23790dd43178fef98bf846258019c87.dir
+      size: 22745818
+      nfiles: 4
+    - path: pipelines/serialized/missing_data_removal_pipeline.pkl
+      md5: 8968e07ffab3e4ff12cb5cd663bad4de
+      size: 8685
+  numerical_transformations:
+    cmd: python scripts/test/test_numerical_transformations.py && python scripts/numerical_transformations.py
+    deps:
+    - path: data/no_missing/
+      md5: a23790dd43178fef98bf846258019c87.dir
+      size: 22745818
+      nfiles: 4
+    - path: scripts/numerical_transformations.py
+      md5: 8b53530735b3ffd2101e6c1fd3cd061f
+      size: 2300
+    - path: scripts/test/test_numerical_transformations.py
+      md5: 06ddb7702dca16b84e90e251da719854
+      size: 2594
+    outs:
+    - path: data/numerical_transformed/
+      md5: 35d002566439f8945907c440cdbbf758.dir
+      size: 21401753
+      nfiles: 4
+    - path: pipelines/serialized/numerical_pipeline.pkl
+      md5: 8dd90ae3fdce275f402adf86dd2081a4
+      size: 7145
+  categorical_encoder:
+    cmd: python scripts/test/test_categorical_encoder.py && python scripts/categorical_encoder.py
+    deps:
+    - path: data/numerical_transformed/
+      md5: 35d002566439f8945907c440cdbbf758.dir
+      size: 21401753
+      nfiles: 4
+    - path: scripts/categorical_encoder.py
+      md5: c2774d55d15f7293243a120bd44f54f2
+      size: 2251
+    - path: scripts/test/test_categorical_encoder.py
+      md5: 6bd61b9fb7b83e840b650c114daca4ae
+      size: 1864
+    outs:
+    - path: data/categorical_transformed/
+      md5: 829aa20bcd6f6ce43993177c49a9cdb4.dir
+      size: 23275927
+      nfiles: 4
+    - path: pipelines/serialized/categorical_pipeline.pkl
+      md5: d90e03e8a03485bab45ed46853d4f91f
+      size: 8897

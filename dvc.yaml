@@ -1,0 +1,35 @@
+stages:
+  split_data:
+    cmd: python scripts/split_data.py
+    deps:
+    - data/raw/
+    - scripts/split_data.py
+    outs:
+    - data/splitted/
+  remove_missing_data:
+    cmd: python scripts/test/test_remove_missing_data.py && python scripts/remove_missing_data.py
+    deps:
+    - data/splitted/
+    - scripts/remove_missing_data.py
+    - scripts/test/test_numerical_transformations.py
+    outs:
+    - data/no_missing/
+    - pipelines/serialized/missing_data_removal_pipeline.pkl
+  numerical_transformations:
+    cmd: python scripts/test/test_numerical_transformations.py && python scripts/numerical_transformations.py
+    deps:
+    - data/no_missing/
+    - scripts/numerical_transformations.py
+    - scripts/test/test_numerical_transformations.py
+    outs:
+    - data/numerical_transformed/
+    - pipelines/serialized/numerical_pipeline.pkl
+  categorical_encoder:
+    cmd: python scripts/test/test_categorical_encoder.py && python scripts/categorical_encoder.py
+    deps:
+    - data/numerical_transformed/
+    - scripts/categorical_encoder.py
+    - scripts/test/test_categorical_encoder.py
+    outs:
+    - data/categorical_transformed/
+    - pipelines/serialized/categorical_pipeline.pkl
