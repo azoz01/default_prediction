@@ -31,9 +31,15 @@ def main():
     missing_data_removal_pipeline.fit(X_train)
 
     pipeline_logger.info("Transforming train sample")
-    X_train_transformed = missing_data_removal_pipeline.transform(X_train)
+    (
+        X_train_transformed,
+        y_train_transformed,
+    ) = missing_data_removal_pipeline.transform(X_train, y_train)
     pipeline_logger.info("Transforming test sample")
-    X_test_transformed = missing_data_removal_pipeline.transform(X_test)
+    (
+        X_test_transformed,
+        y_test_transformed,
+    ) = missing_data_removal_pipeline.transform(X_test, y_test)
 
     pipeline_logger.info(
         f"Saving output data to: {paths.NO_MISSING_DATA_PATH}"
@@ -41,22 +47,23 @@ def main():
     X_train_transformed.to_parquet(
         os.path.join(paths.NO_MISSING_DATA_PATH, "X_train.parquet")
     )
-    y_train.to_parquet(
+    y_train_transformed.to_parquet(
         os.path.join(paths.NO_MISSING_DATA_PATH, "y_train.parquet")
     )
     X_test_transformed.to_parquet(
         os.path.join(paths.NO_MISSING_DATA_PATH, "X_test.parquet")
     )
-    y_test.to_parquet(
+    y_test_transformed.to_parquet(
         os.path.join(paths.NO_MISSING_DATA_PATH, "y_test.parquet")
     )
 
     pipeline_logger.info(
-        f"Saving serialized pipeline to {paths.SERIALIZED_PATH}"
+        f"Saving serialized pipeline to {paths.PIPELINES_SERIALIZED_PATH}"
     )
     with open(
         os.path.join(
-            paths.SERIALIZED_PATH, "missing_data_removal_pipeline.pkl"
+            paths.PIPELINES_SERIALIZED_PATH,
+            "missing_data_removal_pipeline.pkl",
         ),
         "wb",
     ) as f:

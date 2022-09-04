@@ -10,7 +10,10 @@ NUMERICAL_TRANSFORMED_DATA_PATH = os.path.join(
 CATEGORICAL_TRANSFORMED_DATA_PATH = os.path.join(
     ROOT_PATH, "data", "categorical_transformed"
 )
-SERIALIZED_PATH = os.path.join(ROOT_PATH, "serialized")
+DATA_TO_TRAIN_PATH = CATEGORICAL_TRANSFORMED_DATA_PATH
+PIPELINES_SERIALIZED_PATH = os.path.join(ROOT_PATH, "pipelines", "serialized")
+MODELS_SERIALIZED_PATH = os.path.join(ROOT_PATH, "models", "serialized")
+MODELS_PARAMETERS_PATH = os.path.join(ROOT_PATH, "models", "parameters")
 
 
 def main():

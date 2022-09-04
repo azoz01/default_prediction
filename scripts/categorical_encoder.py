@@ -56,10 +56,13 @@ def main():
     )
 
     pipeline_logger.info(
-        f"Saving serialized pipeline to {paths.SERIALIZED_PATH}"
+        f"Saving serialized pipeline to {paths.PIPELINES_SERIALIZED_PATH}"
     )
     with open(
-        os.path.join(paths.SERIALIZED_PATH, "categorical_pipeline.pkl"), "wb",
+        os.path.join(
+            paths.PIPELINES_SERIALIZED_PATH, "categorical_pipeline.pkl"
+        ),
+        "wb",
     ) as f:
         pkl.dump(categorical_encoder, f)
 

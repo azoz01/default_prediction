@@ -16,12 +16,6 @@ class MissingDataRemovalPipeline(TransformerMixin):
                     ),
                 ),
                 (
-                    "rows_with_missing_data_dropper",
-                    RowsWithMissingDataDropper(
-                        columns_to_filter_by=constants.COLUMNS_TO_FILTER_ROWS_WITH_NULLS
-                    ),
-                ),
-                (
                     "median_imputer",
                     MedianImputer(
                         columns_to_impute=constants.COLUMNS_TO_IMPUTE_MEDIAN
@@ -59,13 +53,20 @@ class MissingDataRemovalPipeline(TransformerMixin):
             ]
         )
 
+        self.rows_with_missing_data_dropper = RowsWithMissingDataDropper(
+            columns_to_filter_by=constants.COLUMNS_TO_FILTER_ROWS_WITH_NULLS
+        )
+
     def fit(self, X: DataFrame, y: DataFrame = None, **kwargs):
         self.missing_data_removal_pipeline.fit(X)
         return self
 
     def transform(self, X: DataFrame, y: DataFrame = None, **kwargs):
+        # TODO: refactor somehow
         X = self.missing_data_removal_pipeline.transform(X)
         if y is not None:
+            X, y = self.rows_with_missing_data_dropper.transform(X, y)
             return X, y
+        X = self.rows_with_missing_data_dropper.transform(X)
         return X
 
