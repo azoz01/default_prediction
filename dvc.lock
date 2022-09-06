@@ -78,3 +78,18 @@ stages:
     - path: pipelines/serialized/categorical_pipeline.pkl
       md5: d90e03e8a03485bab45ed46853d4f91f
       size: 8897
+  smote:
+    cmd: python scripts/smote.py
+    deps:
+    - path: data/categorical_transformed/
+      md5: 829aa20bcd6f6ce43993177c49a9cdb4.dir
+      size: 23275927
+      nfiles: 4
+    - path: scripts/smote.py
+      md5: 668e9fe0d7d5f3381a3f77935db3bb7b
+      size: 1971
+    outs:
+    - path: data/balanced/
+      md5: e0de54461162a4ee7e23dbaccf07d571.dir
+      size: 92090133
+      nfiles: 6

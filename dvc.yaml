@@ -33,3 +33,10 @@ stages:
     outs:
     - data/categorical_transformed/
     - pipelines/serialized/categorical_pipeline.pkl
+  smote:
+    cmd: python scripts/smote.py
+    deps:
+    - data/categorical_transformed/
+    - scripts/smote.py
+    outs:
+    - data/balanced/

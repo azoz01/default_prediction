@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.getcwd()))
 
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
+from sklearn.calibration import CalibratedClassifierCV
 import utils.paths as paths
 from utils.logging import model_logger
 from models.utils.metrics import get_metrics
