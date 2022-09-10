@@ -13,8 +13,9 @@ CATEGORICAL_TRANSFORMED_DATA_PATH = os.path.join(
 BALANCED_DATA_PATH = os.path.join(ROOT_PATH, "data", "balanced")
 DATA_TO_TRAIN_PATH = CATEGORICAL_TRANSFORMED_DATA_PATH
 PIPELINES_SERIALIZED_PATH = os.path.join(ROOT_PATH, "pipelines", "serialized")
-MODELS_SERIALIZED_PATH = os.path.join(ROOT_PATH, "models", "serialized")
-MODELS_PARAMETERS_PATH = os.path.join(ROOT_PATH, "models", "parameters")
+MODELS_SERIALIZED_PATH = os.path.join(ROOT_PATH, "models_files", "serialized")
+MODELS_PARAMETERS_PATH = os.path.join(ROOT_PATH, "models_files", "parameters")
+OPTUNA_STUDIES_PATH = os.path.join(ROOT_PATH, "models_files", "studies")
 
 
 def main():

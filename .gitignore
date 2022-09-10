@@ -3,6 +3,5 @@ data/raw/*
 !.keep
 *.parquet
 *__pycache__*
-.coverage
 !*.dvc
 secured

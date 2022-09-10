@@ -1,0 +1,5 @@
+outs:
+- md5: b4d073b07f5069fb0d69c4a25466d060.dir
+  size: 9953
+  nfiles: 1
+  path: serialized
