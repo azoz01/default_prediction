@@ -10,6 +10,9 @@ NUMERICAL_TRANSFORMED_DATA_PATH = os.path.join(
 CATEGORICAL_TRANSFORMED_DATA_PATH = os.path.join(
     ROOT_PATH, "data", "categorical_transformed"
 )
+CATEGORICAL_EMBEDDED_DATA_PATH = os.path.join(
+    ROOT_PATH, "data", "categorical_embedded"
+)
 BALANCED_DATA_PATH = os.path.join(ROOT_PATH, "data", "balanced")
 DATA_TO_TRAIN_PATH = CATEGORICAL_TRANSFORMED_DATA_PATH
 PIPELINES_SERIALIZED_PATH = os.path.join(ROOT_PATH, "pipelines", "serialized")

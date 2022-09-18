@@ -15,23 +15,19 @@ from utils.parameters import CALIBRATION_SIZE
 def main():
     pipeline_logger.info("Started SMOTE pipeline")
     pipeline_logger.info(
-        f"Reading input data from {paths.CATEGORICAL_TRANSFORMED_DATA_PATH}"
+        f"Reading input data from {paths.CATEGORICAL_EMBEDDED_DATA_PATH}"
     )
     X_train = pd.read_parquet(
-        os.path.join(
-            paths.CATEGORICAL_TRANSFORMED_DATA_PATH, "X_train.parquet"
-        )
+        os.path.join(paths.CATEGORICAL_EMBEDDED_DATA_PATH, "X_train.parquet")
     )
     y_train = pd.read_parquet(
-        os.path.join(
-            paths.CATEGORICAL_TRANSFORMED_DATA_PATH, "y_train.parquet"
-        )
+        os.path.join(paths.CATEGORICAL_EMBEDDED_DATA_PATH, "y_train.parquet")
     )
     X_test = pd.read_parquet(
-        os.path.join(paths.CATEGORICAL_TRANSFORMED_DATA_PATH, "X_test.parquet")
+        os.path.join(paths.CATEGORICAL_EMBEDDED_DATA_PATH, "X_test.parquet")
     )
     y_test = pd.read_parquet(
-        os.path.join(paths.CATEGORICAL_TRANSFORMED_DATA_PATH, "y_test.parquet")
+        os.path.join(paths.CATEGORICAL_EMBEDDED_DATA_PATH, "y_test.parquet")
     )
 
     X_train, X_calib, y_train, y_calib = train_test_split(

@@ -33,10 +33,19 @@ stages:
     outs:
     - data/categorical_transformed/
     - pipelines/serialized/categorical_pipeline.pkl
+  categorical_embedder:
+    cmd: python scripts/test/test_categorical_embedder.py && python scripts/categorical_embedder.py
+    deps:
+    - data/numerical_transformed/
+    - scripts/categorical_embedder.py
+    - scripts/test/test_categorical_embedder.py
+    outs:
+    - data/categorical_embedded/
+    - pipelines/serialized/categorical_embedder.pkl
   smote:
     cmd: python scripts/smote.py
     deps:
-    - data/categorical_transformed/
+    - data/categorical_embedded/
     - scripts/smote.py
     outs:
     - data/balanced/

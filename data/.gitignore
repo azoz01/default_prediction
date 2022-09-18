@@ -6,3 +6,4 @@
 /pipelines/serialized/missing_data_removal_pipeline.pkl
 /pipelines/serialized/numerical_pipeline.pkl
 /balanced
+/categorical_embedded

@@ -93,3 +93,24 @@ stages:
       md5: e0de54461162a4ee7e23dbaccf07d571.dir
       size: 92090133
       nfiles: 6
+  categorical_embedder:
+    cmd: python scripts/test/test_categorical_embedder.py && python scripts/categorical_embedder.py
+    deps:
+    - path: data/numerical_transformed/
+      md5: 35d002566439f8945907c440cdbbf758.dir
+      size: 21401753
+      nfiles: 4
+    - path: scripts/categorical_embedder.py
+      md5: 5f627d88a2e4d31ddf7653c83a62c357
+      size: 2355
+    - path: scripts/test/test_categorical_embedder.py
+      md5: ef5854d7b9d9f3c209c8d6243c152441
+      size: 2211
+    outs:
+    - path: data/categorical_embedded/
+      md5: b723021497f5e59409d3f14fc3312541.dir
+      size: 21970369
+      nfiles: 4
+    - path: pipelines/serialized/categorical_embedder.pkl
+      md5: fe368599418fcc40472622b94609f89e
+      size: 121695913
