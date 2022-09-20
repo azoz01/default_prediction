@@ -45,7 +45,14 @@ stages:
   smote:
     cmd: python scripts/smote.py
     deps:
-    - data/categorical_embedded/
+    - data/feature_selected/
     - scripts/smote.py
     outs:
     - data/balanced/
+  frufs:
+    cmd: python scripts/test/test_frufs.py && python scripts/frufs.py
+    deps:
+    - data/categorical_embedded
+    - scripts/frufs.py
+    outs:
+    - data/feature_selected

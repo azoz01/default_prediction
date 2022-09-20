@@ -22,7 +22,9 @@ class CategoryEmbedder(TransformerMixin):
 
     def transform(self, X: DataFrame, y: DataFrame = None, **kwargs):
         X = self._categorize_categorical_variables(X)
-        tabular_pandas: TabularPandas = self._get_tabular_pandas(X)
+        tabular_pandas: TabularPandas = self._get_tabular_pandas(
+            X, valid_sample_frac=0
+        )
         X_embedded: DataFrame = self._embed_features(
             self.nn_model, tabular_pandas
         )

@@ -40,9 +40,15 @@ def main():
     )
     pipeline_logger.info("Transforming test sample")
     X_test_transformed: pd.DataFrame = category_embedder.transform(
-        X_test, y_train
+        X_test, y_test
     )
 
+    assert (
+        X_train_transformed.shape[0] == y_train.shape[0]
+    ), "Shapes of train sample are inconsistent"
+    assert (
+        X_test_transformed.shape[0] == y_test.shape[0]
+    ), "Shapes of train sample are inconsistent"
     pipeline_logger.info("Checking for nulls")
     assert (
         X_train_transformed.isna().sum().sum() == 0

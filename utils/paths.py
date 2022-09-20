@@ -13,8 +13,11 @@ CATEGORICAL_TRANSFORMED_DATA_PATH = os.path.join(
 CATEGORICAL_EMBEDDED_DATA_PATH = os.path.join(
     ROOT_PATH, "data", "categorical_embedded"
 )
+FEATURE_SELECTED_DATA_PATH = os.path.join(
+    ROOT_PATH, "data", "feature_selected"
+)
 BALANCED_DATA_PATH = os.path.join(ROOT_PATH, "data", "balanced")
-DATA_TO_TRAIN_PATH = CATEGORICAL_TRANSFORMED_DATA_PATH
+DATA_TO_TRAIN_PATH = BALANCED_DATA_PATH
 PIPELINES_SERIALIZED_PATH = os.path.join(ROOT_PATH, "pipelines", "serialized")
 MODELS_SERIALIZED_PATH = os.path.join(ROOT_PATH, "models_files", "serialized")
 MODELS_PARAMETERS_PATH = os.path.join(ROOT_PATH, "models_files", "parameters")

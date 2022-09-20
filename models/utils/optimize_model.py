@@ -82,10 +82,12 @@ def optimize_model(default_model_name: str, define_model_fun: Callable):
 
 def _objective(trial, define_model_fun, X, y):
     model = define_model_fun(trial)
-    result = cross_validate(model, X, y, scoring="f1", return_train_score=True)
+    result = cross_validate(
+        model, X, y, cv=3, scoring="f1", return_train_score=True
+    )
     train_score = result["train_score"]
     test_score = result["test_score"]
-    return np.mean(train_score), np.mean(train_score - test_score)
+    return np.mean(train_score), np.mean((train_score - test_score))
 
 
 def _get_system_arguments() -> Dict[str, str]:

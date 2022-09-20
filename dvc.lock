@@ -81,17 +81,17 @@ stages:
   smote:
     cmd: python scripts/smote.py
     deps:
-    - path: data/categorical_transformed/
-      md5: 829aa20bcd6f6ce43993177c49a9cdb4.dir
-      size: 23275927
+    - path: data/feature_selected/
+      md5: 6fe4f60216f116ce90023a31cbcbcc24.dir
+      size: 7162317
       nfiles: 4
     - path: scripts/smote.py
-      md5: 668e9fe0d7d5f3381a3f77935db3bb7b
-      size: 1971
+      md5: 2120084d8a5890881a1036737996f1b0
+      size: 1892
     outs:
     - path: data/balanced/
-      md5: e0de54461162a4ee7e23dbaccf07d571.dir
-      size: 92090133
+      md5: 78803beba4f5071a8e4577fc5d4d1456.dir
+      size: 18005318
       nfiles: 6
   categorical_embedder:
     cmd: python scripts/test/test_categorical_embedder.py && python scripts/categorical_embedder.py
@@ -104,13 +104,28 @@ stages:
       md5: 5f627d88a2e4d31ddf7653c83a62c357
       size: 2355
     - path: scripts/test/test_categorical_embedder.py
-      md5: ef5854d7b9d9f3c209c8d6243c152441
-      size: 2211
+      md5: b30e5c645a443454f90e0ecce8129d63
+      size: 2446
     outs:
     - path: data/categorical_embedded/
-      md5: b723021497f5e59409d3f14fc3312541.dir
-      size: 21970369
+      md5: 3c0c877e03448e7a22ee9686ef988cb1.dir
+      size: 30910907
       nfiles: 4
     - path: pipelines/serialized/categorical_embedder.pkl
-      md5: fe368599418fcc40472622b94609f89e
-      size: 121695913
+      md5: fdecd0fdb7330ce1b32c227df18e51ca
+      size: 121696000
+  frufs:
+    cmd: python scripts/test/test_frufs.py && python scripts/frufs.py
+    deps:
+    - path: data/categorical_embedded
+      md5: 3c0c877e03448e7a22ee9686ef988cb1.dir
+      size: 30910907
+      nfiles: 4
+    - path: scripts/frufs.py
+      md5: f59a2e15c96611ee278c5f126be3b3c7
+      size: 2238
+    outs:
+    - path: data/feature_selected
+      md5: 6fe4f60216f116ce90023a31cbcbcc24.dir
+      size: 7162317
+      nfiles: 4
