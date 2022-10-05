@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 from pipelines.null_removal.fixed_value_imputer import FixedValueImputer
-from pipelines.constants import COLUMNS_TO_IMPUTE_0
+from pipelines.lib.constants import COLUMNS_TO_IMPUTE_0
 
 
 @pytest.fixture

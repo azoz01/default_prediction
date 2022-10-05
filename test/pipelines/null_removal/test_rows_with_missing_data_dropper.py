@@ -3,7 +3,7 @@ import pandas as pd
 from pipelines.null_removal.rows_with_missing_data_dropper import (
     RowsWithMissingDataDropper,
 )
-from pipelines.constants import COLUMNS_TO_FILTER_ROWS_WITH_NULLS
+from pipelines.lib.constants import COLUMNS_TO_FILTER_ROWS_WITH_NULLS
 
 
 @pytest.fixture()

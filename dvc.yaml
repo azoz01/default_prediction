@@ -1,58 +1,79 @@
 stages:
   split_data:
-    cmd: python scripts/split_data.py
+    cmd: python pipelines/bin/split_data.py
     deps:
-    - data/raw/
-    - scripts/split_data.py
+    - ${paths.data.raw}
+    - pipelines/bin/split_data.py
+    - utils
+    params:
+    - split_data.valid_size
+    - split_data.test_size
     outs:
-    - data/splitted/
-  remove_missing_data:
-    cmd: python scripts/test/test_remove_missing_data.py && python scripts/remove_missing_data.py
+    - ${paths.data.splitted}
+  clean:
+    cmd: python pipelines/bin/clean_data.py --validate
     deps:
-    - data/splitted/
-    - scripts/remove_missing_data.py
-    - scripts/test/test_numerical_transformations.py
+    - ${paths.data.splitted}
+    - pipelines/bin/clean_data.py
+    - utils
     outs:
-    - data/no_missing/
-    - pipelines/serialized/missing_data_removal_pipeline.pkl
+    - ${paths.data.clean}
   numerical_transformations:
-    cmd: python scripts/test/test_numerical_transformations.py && python scripts/numerical_transformations.py
+    cmd: python pipelines/bin/numerical_transformations.py --validate
     deps:
-    - data/no_missing/
-    - scripts/numerical_transformations.py
-    - scripts/test/test_numerical_transformations.py
+    - ${paths.data.clean}
+    - pipelines/bin/numerical_transformations.py
+    - utils
     outs:
-    - data/numerical_transformed/
-    - pipelines/serialized/numerical_pipeline.pkl
-  categorical_encoder:
-    cmd: python scripts/test/test_categorical_encoder.py && python scripts/categorical_encoder.py
+    - ${paths.data.numerical_transformed}
+  one_hot:
+    cmd: python pipelines/bin/one_hot.py --validate
     deps:
-    - data/numerical_transformed/
-    - scripts/categorical_encoder.py
-    - scripts/test/test_categorical_encoder.py
+    - ${paths.data.numerical_transformed}
+    - pipelines/bin/one_hot.py
+    - utils
     outs:
-    - data/categorical_transformed/
-    - pipelines/serialized/categorical_pipeline.pkl
-  categorical_embedder:
-    cmd: python scripts/test/test_categorical_embedder.py && python scripts/categorical_embedder.py
+    - ${paths.data.categorical_transformed}
+  category_embedding:
+    cmd: python pipelines/bin/category_embedding.py --validate
     deps:
-    - data/numerical_transformed/
-    - scripts/categorical_embedder.py
-    - scripts/test/test_categorical_embedder.py
+    - ${paths.data.numerical_transformed}
+    - pipelines/bin/category_embedding.py
+    - utils
+    params:
+    - category_embedding.embedder_n_epochs
+    - category_embedding.embedder_num_layers
     outs:
-    - data/categorical_embedded/
-    - pipelines/serialized/categorical_embedder.pkl
-  smote:
-    cmd: python scripts/smote.py
-    deps:
-    - data/feature_selected/
-    - scripts/smote.py
-    outs:
-    - data/balanced/
+    - ${paths.data.categorical_embedded}
   frufs:
-    cmd: python scripts/test/test_frufs.py && python scripts/frufs.py
+    cmd: python pipelines/bin/frufs.py --validate
     deps:
-    - data/categorical_embedded
-    - scripts/frufs.py
+    - ${paths.data.categorical_transformed}
+    - ${paths.data.categorical_embedded}
+    - pipelines/bin/frufs.py
+    - utils
+    params:
+    - frufs.output_n_cols
+    - frufs.input
     outs:
-    - data/feature_selected
+    - ${paths.data.reduced}
+  smote:
+    cmd: python pipelines/bin/smote.py
+    deps:
+    - ${paths.data.reduced}
+    - pipelines/bin/smote.py
+    - utils
+    params:
+    - smote.calibration_size
+    outs:
+    - ${paths.data.balanced_smote}
+  oversample:
+    cmd: python pipelines/bin/oversample.py
+    deps:
+    - ${paths.data.reduced}
+    - pipelines/bin/oversample.py
+    - utils
+    params:
+    - oversample.calibration_size
+    outs:
+    - ${paths.data.balanced}

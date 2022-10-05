@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from pipelines.null_removal.mode_imputer import ModeImputer
-from pipelines.constants import COLUMNS_TO_IMPUTE_MODE
+from pipelines.lib.constants import COLUMNS_TO_IMPUTE_MODE
 
 
 @pytest.fixture

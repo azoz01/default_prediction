@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from pipelines.null_removal.median_imputer import MedianImputer
-from pipelines.constants import COLUMNS_TO_IMPUTE_MEDIAN
+from pipelines.lib.constants import COLUMNS_TO_IMPUTE_MEDIAN
 
 
 @pytest.fixture

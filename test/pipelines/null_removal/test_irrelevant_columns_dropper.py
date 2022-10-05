@@ -3,7 +3,7 @@ import pandas as pd
 from pipelines.null_removal.irrelevant_columns_dropper import (
     IrrelevantColumnsDropper,
 )
-from pipelines.constants import COLUMNS_TO_DROP
+from pipelines.lib.constants import COLUMNS_TO_DROP
 
 
 @pytest.fixture()

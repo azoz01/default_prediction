@@ -1,0 +1,5 @@
+outs:
+- md5: f70b4505827aeeab8b2259c5ec37ecc0.dir
+  size: 1786
+  nfiles: 3
+  path: parameters

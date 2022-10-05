@@ -1,131 +1,176 @@
 schema: '2.0'
 stages:
   split_data:
-    cmd: python scripts/split_data.py
+    cmd: python pipelines/bin/split_data.py
     deps:
-    - path: data/raw/
+    - path: pipelines/bin/split_data.py
+      md5: 20e7804332be655f1d03fdd90817f655
+      size: 1645
+    - path: resources/data/raw
       md5: 471b0efdf22136513c2eca6a76f41cf0.dir
       size: 85166940
       nfiles: 6
-    - path: scripts/split_data.py
-      md5: 4b705af745724817f55c179287e91da2
-      size: 1326
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    params:
+      params.yaml:
+        split_data.test_size: 0.15
+        split_data.valid_size: 0.15
     outs:
-    - path: data/splitted/
-      md5: 50c1d8673b123186370d31892930e5a7.dir
-      size: 27635666
-      nfiles: 4
-  remove_missing_data:
-    cmd: python scripts/test/test_remove_missing_data.py && python scripts/remove_missing_data.py
-    deps:
-    - path: data/splitted/
-      md5: 50c1d8673b123186370d31892930e5a7.dir
-      size: 27635666
-      nfiles: 4
-    - path: scripts/remove_missing_data.py
-      md5: fec1697da2a8f53f3338beb3b2b7c716
-      size: 2324
-    - path: scripts/test/test_numerical_transformations.py
-      md5: 06ddb7702dca16b84e90e251da719854
-      size: 2594
-    outs:
-    - path: data/no_missing/
-      md5: a23790dd43178fef98bf846258019c87.dir
-      size: 22745818
-      nfiles: 4
-    - path: pipelines/serialized/missing_data_removal_pipeline.pkl
-      md5: 8968e07ffab3e4ff12cb5cd663bad4de
-      size: 8685
-  numerical_transformations:
-    cmd: python scripts/test/test_numerical_transformations.py && python scripts/numerical_transformations.py
-    deps:
-    - path: data/no_missing/
-      md5: a23790dd43178fef98bf846258019c87.dir
-      size: 22745818
-      nfiles: 4
-    - path: scripts/numerical_transformations.py
-      md5: 8b53530735b3ffd2101e6c1fd3cd061f
-      size: 2300
-    - path: scripts/test/test_numerical_transformations.py
-      md5: 06ddb7702dca16b84e90e251da719854
-      size: 2594
-    outs:
-    - path: data/numerical_transformed/
-      md5: 35d002566439f8945907c440cdbbf758.dir
-      size: 21401753
-      nfiles: 4
-    - path: pipelines/serialized/numerical_pipeline.pkl
-      md5: 8dd90ae3fdce275f402adf86dd2081a4
-      size: 7145
-  categorical_encoder:
-    cmd: python scripts/test/test_categorical_encoder.py && python scripts/categorical_encoder.py
-    deps:
-    - path: data/numerical_transformed/
-      md5: 35d002566439f8945907c440cdbbf758.dir
-      size: 21401753
-      nfiles: 4
-    - path: scripts/categorical_encoder.py
-      md5: c2774d55d15f7293243a120bd44f54f2
-      size: 2251
-    - path: scripts/test/test_categorical_encoder.py
-      md5: 6bd61b9fb7b83e840b650c114daca4ae
-      size: 1864
-    outs:
-    - path: data/categorical_transformed/
-      md5: 829aa20bcd6f6ce43993177c49a9cdb4.dir
-      size: 23275927
-      nfiles: 4
-    - path: pipelines/serialized/categorical_pipeline.pkl
-      md5: d90e03e8a03485bab45ed46853d4f91f
-      size: 8897
-  smote:
-    cmd: python scripts/smote.py
-    deps:
-    - path: data/feature_selected/
-      md5: 6fe4f60216f116ce90023a31cbcbcc24.dir
-      size: 7162317
-      nfiles: 4
-    - path: scripts/smote.py
-      md5: 2120084d8a5890881a1036737996f1b0
-      size: 1892
-    outs:
-    - path: data/balanced/
-      md5: 78803beba4f5071a8e4577fc5d4d1456.dir
-      size: 18005318
+    - path: resources/data/splitted
+      md5: 5d03e4c07c60e4880b2495e45b998e3a.dir
+      size: 28128421
       nfiles: 6
-  categorical_embedder:
-    cmd: python scripts/test/test_categorical_embedder.py && python scripts/categorical_embedder.py
+  clean:
+    cmd: python pipelines/bin/clean_data.py --validate
     deps:
-    - path: data/numerical_transformed/
-      md5: 35d002566439f8945907c440cdbbf758.dir
-      size: 21401753
-      nfiles: 4
-    - path: scripts/categorical_embedder.py
-      md5: 5f627d88a2e4d31ddf7653c83a62c357
-      size: 2355
-    - path: scripts/test/test_categorical_embedder.py
-      md5: b30e5c645a443454f90e0ecce8129d63
-      size: 2446
+    - path: pipelines/bin/clean_data.py
+      md5: c10985c87b82d311fafe8b28d48b6791
+      size: 1755
+    - path: resources/data/splitted
+      md5: 5d03e4c07c60e4880b2495e45b998e3a.dir
+      size: 28128421
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
     outs:
-    - path: data/categorical_embedded/
-      md5: 3c0c877e03448e7a22ee9686ef988cb1.dir
-      size: 30910907
-      nfiles: 4
-    - path: pipelines/serialized/categorical_embedder.pkl
-      md5: fdecd0fdb7330ce1b32c227df18e51ca
-      size: 121696000
+    - path: resources/data/clean
+      md5: 5425727cca4f8ea4a9b85d54185221e9.dir
+      size: 23328273
+      nfiles: 6
+  numerical_transformations:
+    cmd: python pipelines/bin/numerical_transformations.py --validate
+    deps:
+    - path: pipelines/bin/numerical_transformations.py
+      md5: 41d993650d7d89452ffc697ca9b29beb
+      size: 2672
+    - path: resources/data/clean
+      md5: 5425727cca4f8ea4a9b85d54185221e9.dir
+      size: 23328273
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    outs:
+    - path: resources/data/numerical_transformed
+      md5: 35b85666c6280640ebc8279d1a7dda4a.dir
+      size: 22019819
+      nfiles: 6
+  one_hot:
+    cmd: python pipelines/bin/one_hot.py --validate
+    deps:
+    - path: pipelines/bin/one_hot.py
+      md5: 5550c0bc69eb7a71e851bee9398caa41
+      size: 2019
+    - path: resources/data/numerical_transformed
+      md5: 35b85666c6280640ebc8279d1a7dda4a.dir
+      size: 22019819
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    outs:
+    - path: resources/data/categorical_transformed
+      md5: 80dd6267bc156d75bece1e22088bad70.dir
+      size: 24043252
+      nfiles: 6
+  category_embedding:
+    cmd: python pipelines/bin/category_embedding.py --validate
+    deps:
+    - path: pipelines/bin/category_embedding.py
+      md5: f82c7c92cd6d00fc1fd85ce4ed60417f
+      size: 2106
+    - path: resources/data/numerical_transformed
+      md5: 35b85666c6280640ebc8279d1a7dda4a.dir
+      size: 22019819
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    params:
+      params.yaml:
+        category_embedding.embedder_n_epochs: 5
+        category_embedding.embedder_num_layers: 2
+    outs:
+    - path: resources/data/categorical_embedded
+      md5: e4029d15e793cdfe21d71abe957d700f.dir
+      size: 31392454
+      nfiles: 6
+  smote:
+    cmd: python pipelines/bin/smote.py
+    deps:
+    - path: pipelines/bin/smote.py
+      md5: 2ce86555623665f7ca8547243da42cd2
+      size: 1647
+    - path: resources/data/reduced
+      md5: 42572aae21ec1e60994ed2c52132a651.dir
+      size: 16246014
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    params:
+      params.yaml:
+        smote.calibration_size: 0.15
+    outs:
+    - path: resources/data/balanced_smote
+      md5: cd9a42b67b1f6fc309aa4185002f4b56.dir
+      size: 54376106
+      nfiles: 8
   frufs:
-    cmd: python scripts/test/test_frufs.py && python scripts/frufs.py
+    cmd: python pipelines/bin/frufs.py --validate
     deps:
-    - path: data/categorical_embedded
-      md5: 3c0c877e03448e7a22ee9686ef988cb1.dir
-      size: 30910907
-      nfiles: 4
-    - path: scripts/frufs.py
-      md5: f59a2e15c96611ee278c5f126be3b3c7
-      size: 2238
+    - path: pipelines/bin/frufs.py
+      md5: 0f5e8da563156808d24a03ff20254255
+      size: 2696
+    - path: resources/data/categorical_embedded
+      md5: e4029d15e793cdfe21d71abe957d700f.dir
+      size: 31392454
+      nfiles: 6
+    - path: resources/data/categorical_transformed
+      md5: 80dd6267bc156d75bece1e22088bad70.dir
+      size: 24043252
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    params:
+      params.yaml:
+        frufs.input: categorical_embedded
+        frufs.output_n_cols: 100
     outs:
-    - path: data/feature_selected
-      md5: 6fe4f60216f116ce90023a31cbcbcc24.dir
-      size: 7162317
-      nfiles: 4
+    - path: resources/data/reduced
+      md5: 42572aae21ec1e60994ed2c52132a651.dir
+      size: 16246014
+      nfiles: 6
+  oversample:
+    cmd: python pipelines/bin/oversample.py
+    deps:
+    - path: pipelines/bin/oversample.py
+      md5: b5fb70a00c617fcb3e009c6cdd33d38f
+      size: 1625
+    - path: resources/data/reduced
+      md5: 42572aae21ec1e60994ed2c52132a651.dir
+      size: 16246014
+      nfiles: 6
+    - path: utils
+      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      size: 12476
+      nfiles: 10
+    params:
+      params.yaml:
+        oversample.calibration_size: 0.15
+    outs:
+    - path: resources/data/balanced
+      md5: 8afc3709dc06ea7c8846dc5c8e623a51.dir
+      size: 22297853
+      nfiles: 8
