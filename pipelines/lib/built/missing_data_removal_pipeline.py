@@ -80,7 +80,7 @@ class MissingDataRemovalPipeline(TransformerMixin):
         return self
 
     def transform(
-        self, X: pd.DataFrame, y: pd.DataFrame, **kwargs
+        self, X: pd.DataFrame, y: pd.DataFrame = None, **kwargs
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """
         Transforms data according to pipeline logic.
@@ -93,6 +93,8 @@ class MissingDataRemovalPipeline(TransformerMixin):
             Tuple[pd.DataFrame, pd.DataFrame]: Transformed X and y
         """
         X = self.missing_data_removal_pipeline.transform(X)
+        if y is None:
+            return X
         X, y = self.rows_with_missing_data_dropper.transform(X, y)
         return X, y
 

@@ -1,0 +1,7 @@
+pipelines_paths:
+  - "resources/pipelines/serialized/clean_data.pkl"
+  - "resources/pipelines/serialized/numerical_transformations.pkl"
+  - "resources/pipelines/serialized/category_embedding.pkl"
+  - "resources/pipelines/serialized/frufs.pkl"
+
+model_path: "resources/models/serialized/xgboost_final_2.pkl"

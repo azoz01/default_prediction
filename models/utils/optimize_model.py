@@ -13,7 +13,7 @@ from utils.parameters import get_data_path, get_models_path
 
 logger = logging.getLogger(__name__)
 
-TRAIN_DATA: str = "balanced"
+TRAIN_DATA: str = "balanced_smote"
 
 
 def optimize_model(

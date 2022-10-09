@@ -58,7 +58,7 @@ def main():
         data_validator=CategoryEmbeddingDataValidator(),
     )
     pipeline.run_pipeline()
-    logger.info("Categorty embedding pipeline completed")
+    logger.info("Categorty embedding pipeline completed.")
 
 
 if __name__ == "__main__":

@@ -41,7 +41,6 @@ class IrrelevantColumnsDropper(TransformerMixin):
                 X without specified columns. If y is not none, then passed through
         """
         X = X.drop(columns=self.columns_to_drop)
-        if y:
+        if y is not None:
             return X, y
-        else:
-            return X
+        return X

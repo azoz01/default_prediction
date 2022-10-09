@@ -1,10 +1,11 @@
+from typing import List, Union
 from pydantic import BaseModel
 
 
-class DataEntry(BaseModel):
-    SK_ID_CURR: int
+class ClientData(BaseModel):
+    SK_ID_CURR: Union[int, None] = None
     NAME_CONTRACT_TYPE: str
-    CODE_GENDER: str
+    CODE_GENDER: Union[str, None] = None
     FLAG_OWN_CAR: str
     FLAG_OWN_REALTY: str
     CNT_CHILDREN: int
@@ -12,7 +13,7 @@ class DataEntry(BaseModel):
     AMT_CREDIT: float
     AMT_ANNUITY: float
     AMT_GOODS_PRICE: float
-    NAME_TYPE_SUITE: str
+    NAME_TYPE_SUITE: Union[str, None] = None
     NAME_INCOME_TYPE: str
     NAME_EDUCATION_TYPE: str
     NAME_FAMILY_STATUS: str
@@ -21,7 +22,7 @@ class DataEntry(BaseModel):
     DAYS_BIRTH: int
     DAYS_EMPLOYED: int
     DAYS_REGISTRATION: float
-    DAYS_ID_PUBLISH: int
+    DAYS_ID_PUBLISH: Union[int, None] = None
     OWN_CAR_AGE: float
     FLAG_MOBIL: int
     FLAG_EMP_PHONE: int
@@ -33,8 +34,8 @@ class DataEntry(BaseModel):
     CNT_FAM_MEMBERS: float
     REGION_RATING_CLIENT: int
     REGION_RATING_CLIENT_W_CITY: int
-    WEEKDAY_APPR_PROCESS_START: str
-    HOUR_APPR_PROCESS_START: int
+    WEEKDAY_APPR_PROCESS_START: Union[str, None] = None
+    HOUR_APPR_PROCESS_START: Union[int, None] = None
     REG_REGION_NOT_LIVE_REGION: int
     REG_REGION_NOT_WORK_REGION: int
     LIVE_REGION_NOT_WORK_REGION: int
@@ -96,7 +97,7 @@ class DataEntry(BaseModel):
     DEF_30_CNT_SOCIAL_CIRCLE: float
     OBS_60_CNT_SOCIAL_CIRCLE: float
     DEF_60_CNT_SOCIAL_CIRCLE: float
-    DAYS_LAST_PHONE_CHANGE: float
+    DAYS_LAST_PHONE_CHANGE: Union[float, None] = None
     FLAG_DOCUMENT_2: int
     FLAG_DOCUMENT_3: int
     FLAG_DOCUMENT_4: int
@@ -117,9 +118,13 @@ class DataEntry(BaseModel):
     FLAG_DOCUMENT_19: int
     FLAG_DOCUMENT_20: int
     FLAG_DOCUMENT_21: int
-    AMT_REQ_CREDIT_BUREAU_HOUR: float
-    AMT_REQ_CREDIT_BUREAU_DAY: float
-    AMT_REQ_CREDIT_BUREAU_WEEK: float
-    AMT_REQ_CREDIT_BUREAU_MON: float
-    AMT_REQ_CREDIT_BUREAU_QRT: float
-    AMT_REQ_CREDIT_BUREAU_YEAR: float
+    AMT_REQ_CREDIT_BUREAU_HOUR: Union[float, None] = None
+    AMT_REQ_CREDIT_BUREAU_DAY: Union[float, None] = None
+    AMT_REQ_CREDIT_BUREAU_WEEK: Union[float, None] = None
+    AMT_REQ_CREDIT_BUREAU_MON: Union[float, None] = None
+    AMT_REQ_CREDIT_BUREAU_QRT: Union[float, None] = None
+    AMT_REQ_CREDIT_BUREAU_YEAR: Union[float, None] = None
+
+
+class ClientDataList(BaseModel):
+    data: List[ClientData]

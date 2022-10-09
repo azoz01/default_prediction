@@ -26,7 +26,7 @@ category_embedding:
 
 frufs:
   input: "categorical_embedded"
-  output_n_cols: 100
+  output_n_cols: 200
 
 smote:
   calibration_size: 0.15

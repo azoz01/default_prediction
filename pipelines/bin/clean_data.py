@@ -33,6 +33,7 @@ class MissingDataValidator(DataValidator):
     def _validate_sample(self, X, y):
         if X.shape[0] != y.shape[0]:
             raise InvalidDataError("Different lengths of X and y")
+
         if X.isna().sum().sum() != 0:
             raise InvalidDataError("Null inside data")
 
@@ -42,7 +43,7 @@ def main():
     input_path: str = get_data_path("splitted")
     output_path: str = get_data_path("clean")
     serialized_transformer_output_path: str = os.path.join(
-        get_pipelines_path("serialized"), "remove_missing_data.pkl"
+        get_pipelines_path("serialized"), "clean_data.pkl"
     )
     pipeline: GenericPipeline = GenericPipeline(
         transformer=MissingDataRemovalPipeline(),

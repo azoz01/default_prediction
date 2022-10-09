@@ -11,7 +11,7 @@ stages:
       size: 85166940
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     params:
@@ -27,14 +27,14 @@ stages:
     cmd: python pipelines/bin/clean_data.py --validate
     deps:
     - path: pipelines/bin/clean_data.py
-      md5: c10985c87b82d311fafe8b28d48b6791
-      size: 1755
+      md5: 12bcd22535be81ea1fd62047c716c68b
+      size: 1747
     - path: resources/data/splitted
       md5: 5d03e4c07c60e4880b2495e45b998e3a.dir
       size: 28128421
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     outs:
@@ -42,6 +42,9 @@ stages:
       md5: 5425727cca4f8ea4a9b85d54185221e9.dir
       size: 23328273
       nfiles: 6
+    - path: resources/pipelines/serialized/clean_data.pkl
+      md5: 0be635819344a82abf81ca274bb1e3cd
+      size: 8709
   numerical_transformations:
     cmd: python pipelines/bin/numerical_transformations.py --validate
     deps:
@@ -53,7 +56,7 @@ stages:
       size: 23328273
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     outs:
@@ -61,6 +64,9 @@ stages:
       md5: 35b85666c6280640ebc8279d1a7dda4a.dir
       size: 22019819
       nfiles: 6
+    - path: resources/pipelines/serialized/numerical_transformations.pkl
+      md5: b2f0cfe696543ee1ccbcd2a291a4650b
+      size: 7157
   one_hot:
     cmd: python pipelines/bin/one_hot.py --validate
     deps:
@@ -72,7 +78,7 @@ stages:
       size: 22019819
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     outs:
@@ -80,18 +86,21 @@ stages:
       md5: 80dd6267bc156d75bece1e22088bad70.dir
       size: 24043252
       nfiles: 6
+    - path: resources/pipelines/serialized/one_hot.pkl
+      md5: a05bee21d4beab17f3938112524322d0
+      size: 8739
   category_embedding:
     cmd: python pipelines/bin/category_embedding.py --validate
     deps:
     - path: pipelines/bin/category_embedding.py
-      md5: f82c7c92cd6d00fc1fd85ce4ed60417f
-      size: 2106
+      md5: 56cf266e4fb416a904bf97c7a16c76dd
+      size: 2107
     - path: resources/data/numerical_transformed
       md5: 35b85666c6280640ebc8279d1a7dda4a.dir
       size: 22019819
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     params:
@@ -100,9 +109,12 @@ stages:
         category_embedding.embedder_num_layers: 2
     outs:
     - path: resources/data/categorical_embedded
-      md5: e4029d15e793cdfe21d71abe957d700f.dir
+      md5: 707889ea9391820597f98922427aa01f.dir
       size: 31392454
       nfiles: 6
+    - path: resources/pipelines/serialized/category_embedding.pkl
+      md5: cd944e9bab7a251e499d7d30a6bb76cc
+      size: 119459043
   smote:
     cmd: python pipelines/bin/smote.py
     deps:
@@ -110,11 +122,11 @@ stages:
       md5: 2ce86555623665f7ca8547243da42cd2
       size: 1647
     - path: resources/data/reduced
-      md5: 42572aae21ec1e60994ed2c52132a651.dir
-      size: 16246014
+      md5: a3a0bd4ebee75e97307e1955a393d644.dir
+      size: 28955604
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     params:
@@ -122,17 +134,17 @@ stages:
         smote.calibration_size: 0.15
     outs:
     - path: resources/data/balanced_smote
-      md5: cd9a42b67b1f6fc309aa4185002f4b56.dir
-      size: 54376106
+      md5: ea69c4b266565eb3851dc1a9b080c8b4.dir
+      size: 104390591
       nfiles: 8
   frufs:
     cmd: python pipelines/bin/frufs.py --validate
     deps:
     - path: pipelines/bin/frufs.py
-      md5: 0f5e8da563156808d24a03ff20254255
-      size: 2696
+      md5: f565f1cb504e4f4c989338dc19e05154
+      size: 2312
     - path: resources/data/categorical_embedded
-      md5: e4029d15e793cdfe21d71abe957d700f.dir
+      md5: 707889ea9391820597f98922427aa01f.dir
       size: 31392454
       nfiles: 6
     - path: resources/data/categorical_transformed
@@ -140,18 +152,21 @@ stages:
       size: 24043252
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     params:
       params.yaml:
         frufs.input: categorical_embedded
-        frufs.output_n_cols: 100
+        frufs.output_n_cols: 200
     outs:
     - path: resources/data/reduced
-      md5: 42572aae21ec1e60994ed2c52132a651.dir
-      size: 16246014
+      md5: a3a0bd4ebee75e97307e1955a393d644.dir
+      size: 28955604
       nfiles: 6
+    - path: resources/pipelines/serialized/frufs.pkl
+      md5: 73ed27ca8259103e54a11d235d7d4c8e
+      size: 7856
   oversample:
     cmd: python pipelines/bin/oversample.py
     deps:
@@ -159,11 +174,11 @@ stages:
       md5: b5fb70a00c617fcb3e009c6cdd33d38f
       size: 1625
     - path: resources/data/reduced
-      md5: 42572aae21ec1e60994ed2c52132a651.dir
-      size: 16246014
+      md5: a3a0bd4ebee75e97307e1955a393d644.dir
+      size: 28955604
       nfiles: 6
     - path: utils
-      md5: 538fded94aa28bfddd3674d3b27b9b88.dir
+      md5: 2420c4454040353593f7a6b46beba5e2.dir
       size: 12476
       nfiles: 10
     params:
@@ -171,6 +186,6 @@ stages:
         oversample.calibration_size: 0.15
     outs:
     - path: resources/data/balanced
-      md5: 8afc3709dc06ea7c8846dc5c8e623a51.dir
-      size: 22297853
+      md5: b8e7c7b8a34e29af32dda96a655864f7.dir
+      size: 40349643
       nfiles: 8

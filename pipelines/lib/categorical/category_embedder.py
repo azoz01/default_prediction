@@ -41,7 +41,7 @@ class CategoryEmbedder(TransformerMixin):
         return self
 
     def transform(
-        self, X: pd.DataFrame, y: pd.DataFrame, **kwargs
+        self, X: pd.DataFrame, y: pd.DataFrame = None, **kwargs
     ) -> Union[pd.DataFrame, Tuple[pd.DataFrame, pd.DataFrame]]:
         """
         Encodes specified categorical columns using category embedding technique.
@@ -61,7 +61,10 @@ class CategoryEmbedder(TransformerMixin):
         X_embedded: pd.DataFrame = self._embed_features(
             self.nn_model, tabular_pandas
         )
-        return X_embedded, y
+
+        if y is not None:
+            return X_embedded, y
+        return X_embedded
 
     def _categorize_categorical_variables(
         self, X: pd.DataFrame

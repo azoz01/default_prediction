@@ -4,11 +4,9 @@ from typing import Dict
 
 sys.path.append(os.path.abspath(os.getcwd()))
 import logging
-from sklearn.base import TransformerMixin
 import pandas as pd
-
+from pipelines.lib.feature_selection import FRUFSAdapter
 from utils.parameters import get_data_path, get_parameters, get_pipelines_path
-from FRUFS import FRUFS
 from pipelines.utils.generic_pipeline import (
     GenericPipeline,
     DataValidator,
@@ -42,19 +40,6 @@ class FrufsDataValidator(DataValidator):
             raise InvalidDataError("There are non-numerical columns in sample")
         if X.shape[1] != params["output_n_cols"]:
             raise InvalidDataError("Shape of sample is improper")
-
-
-class FRUFSAdapter(TransformerMixin):
-    def __init__(self, **kwargs):
-        self.frufs: FRUFS = FRUFS(**kwargs)
-
-    def fit(self, X: pd.DataFrame, y: pd.DataFrame, **kwargs):
-        self.frufs.fit(X, **kwargs)
-        return self
-
-    def transform(self, X: pd.DataFrame, y: pd.DataFrame, **kwargs):
-        X = self.frufs.transform(X, **kwargs)
-        return X, y
 
 
 def main():
