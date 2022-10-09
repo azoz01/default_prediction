@@ -1,28 +1,15 @@
 FROM python:3.9
 
+ENV GITHUB_REPO_URL="https://github.com/azoz01/default_prediction"
 ENV CURRENT_MODEL="xgboost_final_2.pkl"
 
 WORKDIR /code
+RUN git clone ${GITHUB_REPO_URL}
+WORKDIR /code/default_prediction
+RUN git checkout develop
 
-COPY ./requirements.txt /code/requirements.txt
-COPY ./models /code/models
-COPY ./pipelines /code/pipelines
-COPY ./utils /code/utils
-
-RUN pip install -r requirements.txt
-
-COPY ./api /code/api
-
-RUN mkdir -p /code/resources/models/serialized
-
-COPY ./resources/models/serialized/${CURRENT_MODEL} /code/resources/models/serialized
-
-RUN mkdir -p /code/resources/pipelines/serialized
-
-COPY ./resources/pipelines/serialized/* /code/resources/pipelines/serialized
-
-RUN ls /code
-
-WORKDIR /code
+RUN pip install --no-cache-dir -r requirements.txt
+RUN dvc pull -r google_storage resources/pipelines/serialized/*
+RUN dvc pull -r google_storage resources/models/serialized/*
 
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "80"]
