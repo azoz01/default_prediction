@@ -1,3 +1,4 @@
 ['remote "google_storage"']
     url = gs://default_prediction/dvc
     projectname = default-prediction
+    credentialpath = ../secured/service_account_key.json
