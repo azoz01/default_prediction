@@ -5,3 +5,4 @@ data/raw/*
 *__pycache__*
 !*.dvc
 secured
+api/test_api.py
