@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 def get_parameters(pipeline_name: str) -> Dict[str, str]:
     with open("params.yaml") as f:
         params_dict: Dict[str, Dict[str, str]] = yaml.load(f, yaml.CLoader)
-    params_for_pipeline: Dict[str, str] = params_dict[pipeline_name]
+    params_for_pipeline: Dict[str, str] = params_dict.get(pipeline_name, {})
     logger.info(f"Parameters for {pipeline_name}: {params_for_pipeline}")
     return params_for_pipeline
 

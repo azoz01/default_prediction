@@ -3,12 +3,10 @@ paths:
     raw: "resources/data/raw"
     splitted: "resources/data/splitted"
     clean: "resources/data/clean"
-    numerical_transformed: "resources/data/numerical_transformed"
-    categorical_transformed: "resources/data/categorical_transformed"
-    categorical_embedded: "resources/data/categorical_embedded"
-    reduced: "resources/data/reduced"
+    transformed_numerical_columns: "resources/data/transformed_numerical_columns"
     balanced: "resources/data/balanced"
-    balanced_smote: "resources/data/balanced_smote"
+    transformed_categorical_columns: "resources/data/categorical_transformed"
+    reduced: "resources/data/reduced"
   pipelines:
     serialized: "resources/pipelines/serialized"
   models:
@@ -17,19 +15,26 @@ paths:
     optuna_studies: "resources/models/studies"
 
 split_data:
+  random_state: 42
   test_size: 0.15
   valid_size: 0.15
+
+balance_data:
+  method: "oversample"
+
+transform_categorical_columns:
+  method: "one_hot"
+
 
 category_embedding:
   embedder_n_epochs: 5
   embedder_num_layers: 2
 
+reduce_data:
+  method: "rfe"
+
 frufs:
-  input: "categorical_embedded"
   output_n_cols: 200
 
-smote:
-  calibration_size: 0.15
-
-oversample:
-  calibration_size: 0.15
+rfe:
+  output_n_cols: 200

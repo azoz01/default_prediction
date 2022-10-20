@@ -79,12 +79,12 @@ class AgeDataPreprocessor(TransformerMixin):
             bins=[float("-inf"), 0, 24, 34, 44, 54, 64, float("inf")],
             labels=[
                 "Non-positive",
-                "<=25",
-                "25< & <=35",
-                "35< & <=45",
-                "45< & <=55",
-                "55< & <=65",
-                "<65",
+                "geq_25",
+                "gt_25 & leq_35",
+                "gt_35 & leq_45",
+                "gt_45 & leq_55",
+                "gt_55 & leq_65",
+                "gt_65",
             ],
         )
         X["DAYS_BIRTH"] = age_col_segmented
@@ -108,7 +108,13 @@ class AgeDataPreprocessor(TransformerMixin):
         months_employed_col_segmented: pd.Series = pd.cut(
             months_employed_col,
             bins=[float("-inf"), 0, 6, 24, 60, float("inf")],
-            labels=["Non-positive", "<=6", "<6 & <=24", "<24 & <=60", "<60"],
+            labels=[
+                "Non-positive",
+                "leq_6",
+                "gt_6 & leq_24",
+                "gt_24 & leq_60",
+                "gt_60",
+            ],
         )
         X["DAYS_EMPLOYED"] = months_employed_col_segmented
         X = X.rename(columns={"DAYS_EMPLOYED": "MONTHS_EMPLOYED"})
@@ -131,7 +137,13 @@ class AgeDataPreprocessor(TransformerMixin):
         years_registration_col_segmented: pd.Series = pd.cut(
             years_registration_col,
             bins=[float("-inf"), -1, 5, 10, 20, float("inf")],
-            labels=["Negative", "<=5", "<5 & <=10", "<10 & <=20", "<20"],
+            labels=[
+                "Negative",
+                "leq_5",
+                "lt_5 & leq_10",
+                "gt_10 & leq_20",
+                "gt_20",
+            ],
         )
         X["DAYS_REGISTRATION"] = years_registration_col_segmented
         X = X.rename(columns={"DAYS_REGISTRATION": "YEARS_REGISTRATION"})
@@ -154,7 +166,7 @@ class AgeDataPreprocessor(TransformerMixin):
         own_car_age_col_segmented: pd.Series = pd.cut(
             own_car_age_col,
             bins=[float("-inf"), 0, 3, 6, 9, float("inf")],
-            labels=["Undefined", "3<=", "3<&<=6", "6<&<=9", "9<"],
+            labels=["Undefined", "geq_3", "gt_3&leq_6", "gt_6&leq_9", "gt_9"],
         )
         X["OWN_CAR_AGE"] = own_car_age_col_segmented
         return X

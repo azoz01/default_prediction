@@ -42,31 +42,14 @@ def load_data(
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 
-def save_data(
-    path: str,
-    X_train: pd.DataFrame = None,
-    y_train: pd.DataFrame = None,
-    X_valid: pd.DataFrame = None,
-    y_valid: pd.DataFrame = None,
-    X_test: pd.DataFrame = None,
-    y_test: pd.DataFrame = None,
-) -> None:
+def save_data(path: str, **kwargs) -> None:
     if not os.path.exists(path):
         logger.info(f"{path} doesn't exist, creating empty")
         os.mkdir(path)
     logger.info(f"Saving data into {path} started")
-    if X_train is not None:
-        X_train.to_parquet(os.path.join(path, "X_train.parquet"))
-    if y_train is not None:
-        y_train.to_parquet(os.path.join(path, "y_train.parquet"))
-    if X_valid is not None:
-        X_valid.to_parquet(os.path.join(path, "X_valid.parquet"))
-    if y_valid is not None:
-        y_valid.to_parquet(os.path.join(path, "y_valid.parquet"))
-    if X_test is not None:
-        X_test.to_parquet(os.path.join(path, "X_test.parquet"))
-    if y_test is not None:
-        y_test.to_parquet(os.path.join(path, "y_test.parquet"))
+    for filename, file in kwargs.items():
+        logger.info(f"Saving {filename}.parquet")
+        file.to_parquet(os.path.join(path, f"{filename}.parquet"))
     logger.info(f"Saving data into {path} successful")
 
 

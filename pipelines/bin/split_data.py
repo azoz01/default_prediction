@@ -1,8 +1,8 @@
 import os
 import sys
 
-
 sys.path.append(os.path.abspath(os.getcwd()))
+
 from typing import Dict
 import logging
 import pandas as pd
@@ -38,7 +38,7 @@ def main() -> None:
         y,
         test_size=parameters["test_size"] + parameters["valid_size"],
         stratify=y,
-        random_state=42,
+        random_state=parameters["random_state"],
     )
     X_valid, X_test, y_valid, y_test = train_test_split(
         X_test,

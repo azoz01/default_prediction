@@ -1,8 +1,6 @@
 /splitted
 /clean
-/numerical_transformed
-/categorical_transformed
-/categorical_embedded
+/transformed_numerical_columns
 /balanced
+/categorical_transformed
 /reduced
-/balanced_smote

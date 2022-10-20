@@ -8,77 +8,63 @@ stages:
     params:
     - split_data.valid_size
     - split_data.test_size
+    - split_data.random_state
     outs:
     - ${paths.data.splitted}
   clean:
-    cmd: python pipelines/bin/clean_data.py --validate
+    cmd: python pipelines/bin/clean_data.py
     deps:
     - ${paths.data.splitted}
     - pipelines/bin/clean_data.py
     - utils
     outs:
     - ${paths.data.clean}
-    - ${paths.pipelines.serialized}/clean_data.pkl
-  numerical_transformations:
-    cmd: python pipelines/bin/numerical_transformations.py --validate
+    - ${paths.pipelines.serialized}/data_cleaner.pkl
+  transform_numerical_columns:
+    cmd: python pipelines/bin/transform_numerical_columns.py
     deps:
     - ${paths.data.clean}
-    - pipelines/bin/numerical_transformations.py
+    - pipelines/bin/transform_numerical_columns.py
     - utils
     outs:
-    - ${paths.data.numerical_transformed}
-    - ${paths.pipelines.serialized}/numerical_transformations.pkl
-  one_hot:
-    cmd: python pipelines/bin/one_hot.py --validate
+    - ${paths.data.transformed_numerical_columns}
+    - ${paths.pipelines.serialized}/numerical_columns_transformer.pkl
+  balance_data:
+    cmd: python pipelines/bin/balance_data.py
     deps:
-    - ${paths.data.numerical_transformed}
-    - pipelines/bin/one_hot.py
-    - utils
-    outs:
-    - ${paths.data.categorical_transformed}
-    - ${paths.pipelines.serialized}/one_hot.pkl
-  category_embedding:
-    cmd: python pipelines/bin/category_embedding.py --validate
-    deps:
-    - ${paths.data.numerical_transformed}
-    - pipelines/bin/category_embedding.py
+    - ${paths.data.transformed_numerical_columns}
+    - pipelines/bin/balance_data.py
+    - pipelines/lib/data_balance
     - utils
     params:
-    - category_embedding.embedder_n_epochs
-    - category_embedding.embedder_num_layers
-    outs:
-    - ${paths.data.categorical_embedded}
-    - ${paths.pipelines.serialized}/category_embedding.pkl
-  frufs:
-    cmd: python pipelines/bin/frufs.py --validate
-    deps:
-    - ${paths.data.categorical_transformed}
-    - ${paths.data.categorical_embedded}
-    - pipelines/bin/frufs.py
-    - utils
-    params:
-    - frufs.output_n_cols
-    - frufs.input
-    outs:
-    - ${paths.data.reduced}
-    - ${paths.pipelines.serialized}/frufs.pkl
-  smote:
-    cmd: python pipelines/bin/smote.py
-    deps:
-    - ${paths.data.reduced}
-    - pipelines/bin/smote.py
-    - utils
-    params:
-    - smote.calibration_size
-    outs:
-    - ${paths.data.balanced_smote}
-  oversample:
-    cmd: python pipelines/bin/oversample.py
-    deps:
-    - ${paths.data.reduced}
-    - pipelines/bin/oversample.py
-    - utils
-    params:
-    - oversample.calibration_size
+    - balance_data.method
     outs:
     - ${paths.data.balanced}
+  transform_categorical_columns:
+    cmd: python pipelines/bin/transform_categorical_columns.py
+    deps:
+    - ${paths.data.balanced}
+    - pipelines/bin/transform_categorical_columns.py
+    - utils
+    params:
+    - category_embedding
+    - transform_categorical_columns.method
+    outs:
+    - ${paths.data.transformed_categorical_columns}
+    - ${paths.pipelines.serialized}/categorical_columns_transformer.pkl
+  reduce_data:
+    cmd: python pipelines/bin/reduce_data.py
+    deps:
+    - pipelines/bin/reduce_data.py
+    - ${paths.data.transformed_categorical_columns}
+    - utils
+    params:
+    - frufs
+    - rfe
+    - reduce_data.method
+    outs:
+    - ${paths.data.reduced}
+    - ${paths.pipelines.serialized}/data_reductor.pkl
+# TODO: add model_train stage
+# TODO: add model calibration stage
+# TODO: add fetching from google drive
