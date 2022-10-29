@@ -11,3 +11,6 @@ class DummyPipeline(TransformerMixin):
         if y is not None:
             return X, y
         return X
+
+    def fit_resample(self, X: pd.DataFrame, y: pd.DataFrame):
+        return X, y

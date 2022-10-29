@@ -11,7 +11,7 @@ stages:
       size: 85166965
       nfiles: 7
     - path: utils
-      md5: 7f3715c09003ade48992b2ceca7bc72a.dir
+      md5: ff0de2452a35552dee6e5579014db15a.dir
       size: 11684
       nfiles: 10
     params:
@@ -35,7 +35,7 @@ stages:
       size: 28128421
       nfiles: 6
     - path: utils
-      md5: 7f3715c09003ade48992b2ceca7bc72a.dir
+      md5: ff0de2452a35552dee6e5579014db15a.dir
       size: 11684
       nfiles: 10
     outs:
@@ -57,7 +57,7 @@ stages:
       size: 23328273
       nfiles: 6
     - path: utils
-      md5: 7f3715c09003ade48992b2ceca7bc72a.dir
+      md5: ff0de2452a35552dee6e5579014db15a.dir
       size: 11684
       nfiles: 10
     outs:
@@ -75,7 +75,7 @@ stages:
       md5: 11cd918a9a81e02614fe1ec9739a8fe7
       size: 1435
     - path: pipelines/lib/data_balance
-      md5: 91e96d6f31c60942ca78c70baa779120.dir
+      md5: 0546e3ab6514186c1cb1b5f2e3e7dc3d.dir
       size: 1688
       nfiles: 4
     - path: resources/data/transformed_numerical_columns
@@ -83,16 +83,16 @@ stages:
       size: 22019960
       nfiles: 6
     - path: utils
-      md5: 7f3715c09003ade48992b2ceca7bc72a.dir
+      md5: ff0de2452a35552dee6e5579014db15a.dir
       size: 11684
       nfiles: 10
     params:
       params.yaml:
-        balance_data.method: oversample
+        balance_data.method: passthrough
     outs:
     - path: resources/data/balanced
-      md5: 091cb82418a289d0a2c288fe2eee9c5f.dir
-      size: 31896810
+      md5: 61b61818d3028e44ceda96f87a277741.dir
+      size: 22019960
       nfiles: 6
   transform_categorical_columns:
     cmd: python pipelines/bin/transform_categorical_columns.py
@@ -101,11 +101,11 @@ stages:
       md5: f94c9d9e2013b224059802aff7d1e61a
       size: 1914
     - path: resources/data/balanced
-      md5: 091cb82418a289d0a2c288fe2eee9c5f.dir
-      size: 31896810
+      md5: 61b61818d3028e44ceda96f87a277741.dir
+      size: 22019960
       nfiles: 6
     - path: utils
-      md5: 7f3715c09003ade48992b2ceca7bc72a.dir
+      md5: ff0de2452a35552dee6e5579014db15a.dir
       size: 11684
       nfiles: 10
     params:
@@ -133,7 +133,7 @@ stages:
       size: 24044788
       nfiles: 6
     - path: utils
-      md5: 7f3715c09003ade48992b2ceca7bc72a.dir
+      md5: ff0de2452a35552dee6e5579014db15a.dir
       size: 11684
       nfiles: 10
     params:
@@ -151,3 +151,55 @@ stages:
     - path: resources/pipelines/serialized/data_reductor.pkl
       md5: b94ee0fdc4afbb4d24bab06382c5618f
       size: 85331
+  train_model:
+    cmd: python models/bin/train_model.py
+    deps:
+    - path: models/bin/train_model.py
+      md5: b19249ce200aa6246b7c5bd6870576b8
+      size: 2991
+    - path: resources/models/studies/xgboost/xgboost-2022-10-20-22_10_35.db
+      md5: caeddadf9b8b258a11a49ee66e1d8543
+      size: 995328
+    - path: utils
+      md5: ff0de2452a35552dee6e5579014db15a.dir
+      size: 11684
+      nfiles: 10
+    params:
+      params.yaml:
+        train_model:
+          study_input_path: resources/models/studies/xgboost/xgboost-2022-10-20-22_10_35.db
+          model_name: xgboost
+          model_difference_threshold: 0.02
+          model_class: xgboost
+          data_path: reduced
+    outs:
+    - path: resources/models/parameters/xgboost.json
+      md5: f4af700615c2abb682f106c3b9b528f9
+      size: 1093
+    - path: resources/models/serialized/xgboost.pkl
+      md5: e8d06afb6c50a1fa9a0907861a1d05c3
+      size: 150368
+  calibrate_model:
+    cmd: python models/bin/calibrate_model.py
+    deps:
+    - path: models/bin/calibrate_model.py
+      md5: ee409a1c6e3b0c5a06781805e2d6c6b5
+      size: 1152
+    - path: resources/models/serialized/xgboost.pkl
+      md5: e8d06afb6c50a1fa9a0907861a1d05c3
+      size: 150368
+    - path: utils
+      md5: ff0de2452a35552dee6e5579014db15a.dir
+      size: 11684
+      nfiles: 10
+    params:
+      params.yaml:
+        calibrate_model:
+          model_input_path: resources/models/serialized/xgboost.pkl
+          data_path: reduced
+          model_output_path: resources/models/serialized/xgboost_calibrated.pkl
+          calibration_method: isotonic
+    outs:
+    - path: resources/models/serialized/xgboost_calibrated.pkl
+      md5: 6a1cb3851186e5a59275016f7314710e
+      size: 183888

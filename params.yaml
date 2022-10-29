@@ -20,7 +20,7 @@ split_data:
   valid_size: 0.15
 
 balance_data:
-  method: "oversample"
+  method: "passthrough"
 
 transform_categorical_columns:
   method: "one_hot"
@@ -38,3 +38,16 @@ frufs:
 
 rfe:
   output_n_cols: 200
+
+train_model:
+  study_input_path: "resources/models/studies/xgboost/xgboost-2022-10-20-22_10_35.db"
+  model_name: "xgboost"
+  model_difference_threshold: 0.02
+  model_class: "xgboost"
+  data_path: "reduced"
+
+calibrate_model:
+  model_input_path: "resources/models/serialized/xgboost.pkl"
+  data_path: "reduced"
+  model_output_path: resources/models/serialized/xgboost_calibrated.pkl
+  calibration_method: "isotonic"

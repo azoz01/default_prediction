@@ -65,6 +65,24 @@ stages:
     outs:
     - ${paths.data.reduced}
     - ${paths.pipelines.serialized}/data_reductor.pkl
-# TODO: add model_train stage
-# TODO: add model calibration stage
-# TODO: add fetching from google drive
+  train_model:
+    cmd: python models/bin/train_model.py
+    deps:
+    - ${train_model.study_input_path}
+    - models/bin/train_model.py
+    - utils
+    params:
+    - train_model
+    outs:
+    - ${paths.models.serialized}/${train_model.model_name}.pkl
+    - ${paths.models.parameters}/${train_model.model_name}.json
+  calibrate_model:
+    cmd: python models/bin/calibrate_model.py
+    deps:
+    - ${calibrate_model.model_input_path}
+    - models/bin/calibrate_model.py
+    - utils
+    params:
+    - calibrate_model
+    outs:
+    - ${calibrate_model.model_output_path}
