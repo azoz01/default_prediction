@@ -2,12 +2,12 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.getcwd()))
-import pandas as pd
 import logging
 
 from utils.parameters import get_data_path, get_pipelines_path
 from pipelines.lib.built import MissingDataRemovalPipeline
 from pipelines.utils.generic_pipeline import GenericPipeline
+from utils.io import update_data_state
 
 logger = logging.getLogger(__name__)
 
@@ -27,6 +27,7 @@ def main():
     )
     pipeline.run_pipeline()
     logger.info("Cleaning data pipeline completed")
+    update_data_state("clean", "clean")
 
 
 if __name__ == "__main__":

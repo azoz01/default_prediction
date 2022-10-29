@@ -5,6 +5,8 @@ import pandas as pd
 import json
 import pickle as pkl
 
+from utils.parameters import get_data_path
+
 logger = logging.getLogger(__name__)
 
 
@@ -51,6 +53,21 @@ def save_data(path: str, **kwargs) -> None:
         logger.info(f"Saving {filename}.parquet")
         file.to_parquet(os.path.join(path, f"{filename}.parquet"))
     logger.info(f"Saving data into {path} successful")
+
+
+def update_data_state(field_to_update: str, value: str) -> None:
+    with open(get_data_path("data_state"), "r") as f:
+        try:
+            current_state: Dict[str, str] = json.load(f)
+        except:
+            logger.info(
+                "Error during loading data state. Overwriting by empty"
+            )
+            current_state: Dict[str, str] = {}
+
+    current_state[field_to_update] = value
+    with open(get_data_path("data_state"), "w") as f:
+        json.dump(current_state, f, indent=4)
 
 
 def save_model(

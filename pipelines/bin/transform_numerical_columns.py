@@ -1,10 +1,10 @@
 import os
 import sys
 
-sys.path.append(os.path.abspath(os.getcwd()))
-import pandas as pd
-import logging
 
+sys.path.append(os.path.abspath(os.getcwd()))
+import logging
+from utils.io import update_data_state
 from utils.parameters import get_data_path, get_pipelines_path
 from pipelines.lib.built import NumericalTransformations
 from pipelines.utils.generic_pipeline import GenericPipeline
@@ -26,6 +26,9 @@ def main():
         serialized_transformer_output_path=serialized_transformer_output_path,
     )
     pipeline.run_pipeline()
+    update_data_state(
+        "transform_numerical_columns", "transform_numerical_columns"
+    )
     logger.info("Transformations of numerical columns pipeline completed")
 
 

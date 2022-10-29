@@ -1,10 +1,12 @@
 import os
 import sys
 
+
 sys.path.append(os.path.abspath(os.getcwd()))
 import logging
 from typing import Dict, Any
 from utils.parameters import get_data_path, get_parameters, get_pipelines_path
+from utils.io import update_data_state
 from pipelines.lib import constants
 from pipelines.lib.dummy import DummyPipeline
 from pipelines.lib.categorical import OneHotColumnEncoder, CategoryEmbedder
@@ -49,6 +51,7 @@ def main():
         serialized_transformer_output_path=serialized_transformer_output_path,
     )
     pipeline.run_pipeline()
+    update_data_state("transform_categorical_columns", parameters["method"])
     logger.info("Categorical columns transformations pipeline completed")
 
 

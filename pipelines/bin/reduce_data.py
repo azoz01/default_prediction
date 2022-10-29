@@ -2,6 +2,7 @@ import os
 import sys
 
 
+
 sys.path.append(os.path.abspath(os.getcwd()))
 from typing import Dict, Any
 import logging
@@ -9,6 +10,7 @@ from pipelines.lib.feature_selection.rfe import RfeAdapter
 from pipelines.lib.feature_selection import FRUFSAdapter
 from pipelines.lib.dummy import DummyPipeline
 from utils.parameters import get_data_path, get_parameters, get_pipelines_path
+from utils.io import update_data_state
 from pipelines.utils.generic_pipeline import GenericPipeline
 
 logger = logging.getLogger(__name__)
@@ -39,6 +41,7 @@ def main():
         serialized_transformer_output_path=serialized_transformer_output_path,
     )
     pipeline.run_pipeline()
+    update_data_state("reduce", parameters["method"])
     logger.info("Data reduction pipeline completed")
 
 

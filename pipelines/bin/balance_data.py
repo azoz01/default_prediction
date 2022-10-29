@@ -10,7 +10,7 @@ from imblearn.over_sampling import RandomOverSampler
 from pipelines.lib.data_balance import SmotencWrapper
 from pipelines.lib.dummy import DummyPipeline
 from utils.parameters import get_data_path, get_parameters
-from utils.io import load_data, save_data
+from utils.io import load_data, save_data, update_data_state
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +47,7 @@ def main():
         X_test=X_test,
         y_test=y_test,
     )
+    update_data_state("balance", parameters["method"])
 
 
 if __name__ == "__main__":
