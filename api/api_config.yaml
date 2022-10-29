@@ -4,4 +4,4 @@ pipelines_paths:
   - "resources/pipelines/serialized/category_embedding.pkl"
   - "resources/pipelines/serialized/frufs.pkl"
 
-model_path: "resources/models/serialized/xgboost_final_2.pkl"
+model_path: "resources/models/serialized/xgboost_calibrated.pkl"
