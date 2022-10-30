@@ -7,6 +7,7 @@ Technologies used inside project:
 * Sklearn, pandas, numpy, ...
 * Optuna
 * DVC
+* MlFlow
 * FastAPI
 * Docker
 
@@ -53,7 +54,18 @@ _Metrics on train and test sets were similar, so models aren't overfitted._
 ```
 https://www.kaggle.com/datasets/gauravduttakiit/loan-defaulter
 ```
+## How to run project
+In order to run project you have run
+```
+pip install -r requirements.txt
+```
+To have DVC and mlflow working you have to get from me file `secured/service_account_key.json`, which allows you to access storage with DVC and MlFlow data which are present in GCP container.
 
+To run mlflow experiment you have to run
+```
+./mlflow/start_mlflow_server.sh
+```
+in order to start Mlflow tracking server.
 ## Reference
 [1] https://arxiv.org/pdf/1106.1813
 
