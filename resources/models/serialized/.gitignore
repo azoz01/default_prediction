@@ -6,3 +6,4 @@
 /lda.pkl
 /gaussian_nb_calibrated.pkl
 /neural_network.pkl
+/logistic_regression.pkl

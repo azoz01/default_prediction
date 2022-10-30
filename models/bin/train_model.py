@@ -4,19 +4,22 @@ import os
 sys.path.append(os.path.abspath(os.getcwd()))
 import logging
 import optuna
+import mlflow
 import pandas as pd
 import numpy as np
 from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from models.lib.utils.metrics import get_metrics
 from utils.parameters import get_data_path, get_parameters
-from utils.io import load_data, save_model
+from utils.io import get_data_state, load_data, save_model
 
 METRICS_DIFFERENCE_THRESHOLD = 0.02
 
 MODELS_NAMES_TO_CLASSES_MAPPING = {
     "xgboost": XGBClassifier,
     "random_forest": RandomForestClassifier,
+    "logistic_regression": LogisticRegression,
 }
 MODELS_DEFAULT_PARAMS = {
     "xgboost": {"scale_pos_weight": 11.381618,},
@@ -24,6 +27,14 @@ MODELS_DEFAULT_PARAMS = {
         "max_features": "sqrt",
         "n_jobs": -1,
         "random_state": 42,
+        "class_weight": "balanced",
+    },
+    "logistic_regression": {
+        "fit_intercept": True,
+        "solver": "saga",
+        "max_iter": 500,
+        "random_state": 42,
+        "n_jobs": -1,
         "class_weight": "balanced",
     },
 }
@@ -40,9 +51,10 @@ def main():
         "model_difference_threshold"
     ]
     model_class: str = parameters["model_class"]
+    mlflow.start_run(run_name=model_class)
+    mlflow.log_param("model_class", model_class)
     data_path: str = get_data_path(parameters["data_path"])
-
-    logger.info("Creating optuna study")
+    logger.info("Loading optuna study")
     study: optuna.study = optuna.load_study(
         study_name=model_name, storage=f"sqlite:///{study_path}",
     )
@@ -54,6 +66,7 @@ def main():
     )
     model_params.update(model_params_optimized)
     model_class = MODELS_NAMES_TO_CLASSES_MAPPING[model_name]
+    mlflow.log_param("model_params", model_params)
     model = model_class(**model_params)
 
     logger.info("Loading data")
@@ -67,25 +80,35 @@ def main():
     X_train, y_train, X_valid, y_valid, X_test, y_test = load_data(
         path=data_path
     )
+    mlflow.log_param("data_state", get_data_state())
 
     logger.info("Fitting model to train data")
     model.fit(X_train, y_train)
 
     logger.info("Evaluating model")
-    logger.info(
-        f"Metrics on train set: {get_metrics(model, X_train, y_train)}"
-    )
+    train_metrics = get_metrics(model, X_train, y_train)
+    logger.info(f"Metrics on train set: {train_metrics}")
+    for metric, value in train_metrics.items():
+        mlflow.log_metric(f"train_{metric}", value)
     logger.info(
         f"Metrics on validation set: {get_metrics(model, X_valid, y_valid)}"
     )
-    logger.info(f"Metrics on test set: {get_metrics(model, X_test, y_test)}")
+    test_metrics = get_metrics(model, X_test, y_test)
+    logger.info(f"Metrics on test set: {test_metrics}")
+    for metric, value in test_metrics.items():
+        mlflow.log_metric(f"test_{metric}", value)
 
-    logger.info(f"Saving model")
+    logger.info("Saving model")
     save_model(
         model,
         f"resources/models/serialized/{model_name}.pkl",
         f"resources/models/parameters/{model_name}.json",
     )
+    logger.info("Publishing artifacts")
+    mlflow.log_artifact(f"resources/models/serialized/{model_name}.pkl")
+    mlflow.log_artifact(f"resources/models/parameters/{model_name}.json")
+
+    mlflow.end_run()
 
 
 def get_best_model_params(study, model_difference_threshold):

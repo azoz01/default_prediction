@@ -11,8 +11,8 @@ stages:
       size: 85166965
       nfiles: 7
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     params:
       params.yaml:
@@ -35,8 +35,8 @@ stages:
       size: 28128421
       nfiles: 6
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     outs:
     - path: resources/data/clean
@@ -57,8 +57,8 @@ stages:
       size: 23328273
       nfiles: 6
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     outs:
     - path: resources/data/transformed_numerical_columns
@@ -83,8 +83,8 @@ stages:
       size: 22019960
       nfiles: 6
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     params:
       params.yaml:
@@ -105,8 +105,8 @@ stages:
       size: 31896810
       nfiles: 6
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     params:
       params.yaml:
@@ -133,8 +133,8 @@ stages:
       size: 24044788
       nfiles: 6
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     params:
       params.yaml:
@@ -155,14 +155,14 @@ stages:
     cmd: python models/bin/train_model.py
     deps:
     - path: models/bin/train_model.py
-      md5: b19249ce200aa6246b7c5bd6870576b8
-      size: 2991
+      md5: d609aef4a94b6af4721ada20ee0cdbe6
+      size: 3980
     - path: resources/models/studies/xgboost/xgboost-2022-10-20-22_10_35.db
       md5: caeddadf9b8b258a11a49ee66e1d8543
       size: 995328
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     params:
       params.yaml:
@@ -185,33 +185,33 @@ stages:
     - path: models/bin/calibrate_model.py
       md5: ee409a1c6e3b0c5a06781805e2d6c6b5
       size: 1152
-    - path: resources/models/serialized/gaussian_nb.pkl
-      md5: d63f72c02e987f63d1ac185013ec8cff
-      size: 11990
+    - path: resources/models/serialized/xgboost.pkl
+      md5: e8d06afb6c50a1fa9a0907861a1d05c3
+      size: 150368
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     params:
       params.yaml:
         calibrate_model:
-          model_input_path: resources/models/serialized/gaussian_nb.pkl
+          model_input_path: resources/models/serialized/xgboost.pkl
           data_path: reduced
-          model_output_path: resources/models/serialized/gaussian_nb_calibrated.pkl
+          model_output_path: resources/models/serialized/xgboost_calibrated.pkl
           calibration_method: isotonic
     outs:
-    - path: resources/models/serialized/gaussian_nb_calibrated.pkl
-      md5: 42482c4669e7378183b3ef1e08782bb2
-      size: 12837
+    - path: resources/models/serialized/xgboost_calibrated.pkl
+      md5: 6a1cb3851186e5a59275016f7314710e
+      size: 183888
   train_gaussian_nb:
     cmd: python models/custom_train/train_gaussian_nb.py
     deps:
     - path: models/custom_train/train_gaussian_nb.py
-      md5: 4325c8ba93c083c840873ba1e0f484a3
-      size: 970
+      md5: 1a36d2b8df8c5d431c31f4ce6bb6618e
+      size: 1360
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     outs:
     - path: resources/models/serialized/gaussian_nb.pkl
@@ -221,13 +221,27 @@ stages:
     cmd: python models/custom_train/train_lda.py
     deps:
     - path: models/custom_train/train_lda.py
-      md5: ad80595d754c68091b4a4f2e855989fe
-      size: 1000
+      md5: 94cd11bc12ab1790b849e9e077c69df5
+      size: 1412
     - path: utils
-      md5: 9787c4ffeca5952efef71797ed770a70.dir
-      size: 9088
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
       nfiles: 6
     outs:
     - path: resources/models/serialized/lda.pkl
       md5: 4e0c99bedc1d3b77460d4953750fb542
       size: 13833
+  train_neural_network:
+    cmd: python models/custom_train/train_neural_network.py
+    deps:
+    - path: models/custom_train/train_neural_network.py
+      md5: 4ab95308d6002a15879f5a7828e89b8c
+      size: 1108
+    - path: utils
+      md5: 491500b859ca418da1e2336055faba25.dir
+      size: 10922
+      nfiles: 6
+    outs:
+    - path: resources/models/serialized/neural_network.pkl
+      md5: 359f07796ed18ac9fcf6b0716e993f08
+      size: 5312168

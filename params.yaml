@@ -48,7 +48,7 @@ train_model:
   data_path: "reduced"
 
 calibrate_model:
-  model_input_path: "resources/models/serialized/gaussian_nb.pkl"
+  model_input_path: "resources/models/serialized/xgboost.pkl"
   data_path: "reduced"
-  model_output_path: resources/models/serialized/gaussian_nb_calibrated.pkl
+  model_output_path: resources/models/serialized/xgboost_calibrated.pkl
   calibration_method: "isotonic"

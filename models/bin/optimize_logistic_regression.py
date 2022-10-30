@@ -11,10 +11,12 @@ def define_model(trial):
     params = {
         "penalty": trial.suggest_categorical("penalty", ["l1", "l2"]),
         "C": trial.suggest_float("C", 0.1, 100),
-        "fit_intercept": False,
+        "fit_intercept": True,
         "solver": "saga",
         "max_iter": 500,
         "random_state": 42,
+        "n_jobs": -1,
+        "class_weight": "balanced",
     }
     return LogisticRegression(**params)
 

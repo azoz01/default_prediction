@@ -100,10 +100,10 @@ stages:
   calibrate_model:
     cmd: python models/bin/calibrate_model.py
     deps:
-    - ${paths.models.serialized}/gaussian_nb.pkl
+    - ${paths.models.serialized}/xgboost.pkl
     - models/bin/calibrate_model.py
     - utils
     params:
     - calibrate_model
     outs:
-    - ${paths.models.serialized}/gaussian_nb_calibrated.pkl
+    - ${paths.models.serialized}/xgboost_calibrated.pkl

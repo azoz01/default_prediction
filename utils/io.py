@@ -1,9 +1,10 @@
 import os
 import logging
 from typing import Any, Dict, Tuple
+import pickle as pkl
 import pandas as pd
 import json
-import pickle as pkl
+import mlflow
 
 from utils.parameters import get_data_path
 
@@ -68,6 +69,24 @@ def update_data_state(field_to_update: str, value: str) -> None:
     current_state[field_to_update] = value
     with open(get_data_path("data_state"), "w") as f:
         json.dump(current_state, f, indent=4)
+
+
+def get_data_state() -> Dict[str, str]:
+    with open(get_data_path("data_state"), "r") as f:
+        return json.load(f)
+
+
+def get_current_mlflow_experiment():
+    with open("mlflow/conf.json", "r") as f:
+        current_experiment = json.load(f)["current_experiment"]
+        mlflow_client = mlflow.tracking.MlflowClient()
+        if not mlflow_client.get_experiment_by_name(name=current_experiment):
+            logger.info(
+                f"Experiment with name {current_experiment} "
+                "doesn't exist. Creating new one"
+            )
+            mlflow.create_experiment(name=current_experiment)
+        return current_experiment
 
 
 def save_model(
