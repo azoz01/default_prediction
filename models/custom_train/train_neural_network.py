@@ -3,7 +3,7 @@ import os
 
 sys.path.append(os.path.abspath(os.getcwd()))
 import logging
-from sklearn.naive_bayes import GaussianNB
+from sklearn.neural_network import MLPClassifier
 from utils.io import load_data, save_pickle
 from models.lib.utils.metrics import get_metrics
 
@@ -12,12 +12,17 @@ logger = logging.getLogger(__name__)
 
 def main():
     data_input_path = "resources/data/reduced"
-    model_output_path = "resources/models/serialized/gaussian_nb.pkl"
+    model_output_path = "resources/models/serialized/neural_network.pkl"
 
     X_train, y_train, X_valid, y_valid, X_test, y_test = load_data(
         data_input_path
     )
-    model = GaussianNB()
+    model = MLPClassifier(
+        hidden_layer_sizes=[500, 200, 100],
+        learning_rate="adaptive",
+        max_iter=20,
+        verbose=True,
+    )
     model.fit(X_train, y_train)
 
     logger.info("Evaluating model")

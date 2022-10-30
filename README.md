@@ -17,10 +17,10 @@ Currently best model is XBboost with 0.69 ROC AUC on test set.
 |XGboost|0.69|0.68|0.16|0.7|
 |Logistic Regression|0.69|0.68|0.16|0.68|
 |Random Forest|0.66|0.64|0.15|0.68|
+|LDA|0.5|0.008|0.45|0.92|
+|GaussianNB|0.51|0.98|0.08|0.12|
 
 _Metrics on train and test sets were similar, so models aren't overfitted._
-
-Now I'm working on Introducing GaussianNB, LDA and neural network
 
 ## Pipelines processing data
 * **split_data** - splits data into training, validation and test ests

@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 from xgboost import XGBClassifier
 from sklearn.ensemble import RandomForestClassifier
-from models.utils.metrics import get_metrics
+from models.lib.utils.metrics import get_metrics
 from utils.parameters import get_data_path, get_parameters
 from utils.io import load_data, save_model
 

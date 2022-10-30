@@ -21,7 +21,7 @@ split_data:
   valid_size: 0.15
 
 balance_data:
-  method: "passthrough"
+  method: "oversample"
 
 transform_categorical_columns:
   method: "one_hot"
@@ -48,7 +48,7 @@ train_model:
   data_path: "reduced"
 
 calibrate_model:
-  model_input_path: "resources/models/serialized/xgboost.pkl"
+  model_input_path: "resources/models/serialized/gaussian_nb.pkl"
   data_path: "reduced"
-  model_output_path: resources/models/serialized/xgboost_calibrated.pkl
+  model_output_path: resources/models/serialized/gaussian_nb_calibrated.pkl
   calibration_method: "isotonic"

@@ -11,7 +11,7 @@ stages:
       size: 85166965
       nfiles: 7
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     params:
@@ -35,7 +35,7 @@ stages:
       size: 28128421
       nfiles: 6
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     outs:
@@ -57,7 +57,7 @@ stages:
       size: 23328273
       nfiles: 6
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     outs:
@@ -83,16 +83,16 @@ stages:
       size: 22019960
       nfiles: 6
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     params:
       params.yaml:
-        balance_data.method: passthrough
+        balance_data.method: oversample
     outs:
     - path: resources/data/balanced
-      md5: 61b61818d3028e44ceda96f87a277741.dir
-      size: 22019960
+      md5: 091cb82418a289d0a2c288fe2eee9c5f.dir
+      size: 31896810
       nfiles: 6
   transform_categorical_columns:
     cmd: python pipelines/bin/transform_categorical_columns.py
@@ -101,11 +101,11 @@ stages:
       md5: 53dd486039e1c31ce3fd88cd7a12f503
       size: 2031
     - path: resources/data/balanced
-      md5: 61b61818d3028e44ceda96f87a277741.dir
-      size: 22019960
+      md5: 091cb82418a289d0a2c288fe2eee9c5f.dir
+      size: 31896810
       nfiles: 6
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     params:
@@ -133,7 +133,7 @@ stages:
       size: 24044788
       nfiles: 6
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     params:
@@ -161,7 +161,7 @@ stages:
       md5: caeddadf9b8b258a11a49ee66e1d8543
       size: 995328
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     params:
@@ -185,21 +185,49 @@ stages:
     - path: models/bin/calibrate_model.py
       md5: ee409a1c6e3b0c5a06781805e2d6c6b5
       size: 1152
-    - path: resources/models/serialized/xgboost.pkl
-      md5: e8d06afb6c50a1fa9a0907861a1d05c3
-      size: 150368
+    - path: resources/models/serialized/gaussian_nb.pkl
+      md5: d63f72c02e987f63d1ac185013ec8cff
+      size: 11990
     - path: utils
-      md5: 0e05fc16913300ff642eb66d750de16a.dir
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
       size: 9088
       nfiles: 6
     params:
       params.yaml:
         calibrate_model:
-          model_input_path: resources/models/serialized/xgboost.pkl
+          model_input_path: resources/models/serialized/gaussian_nb.pkl
           data_path: reduced
-          model_output_path: resources/models/serialized/xgboost_calibrated.pkl
+          model_output_path: resources/models/serialized/gaussian_nb_calibrated.pkl
           calibration_method: isotonic
     outs:
-    - path: resources/models/serialized/xgboost_calibrated.pkl
-      md5: 6a1cb3851186e5a59275016f7314710e
-      size: 183888
+    - path: resources/models/serialized/gaussian_nb_calibrated.pkl
+      md5: 42482c4669e7378183b3ef1e08782bb2
+      size: 12837
+  train_gaussian_nb:
+    cmd: python models/custom_train/train_gaussian_nb.py
+    deps:
+    - path: models/custom_train/train_gaussian_nb.py
+      md5: 4325c8ba93c083c840873ba1e0f484a3
+      size: 970
+    - path: utils
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
+      size: 9088
+      nfiles: 6
+    outs:
+    - path: resources/models/serialized/gaussian_nb.pkl
+      md5: d63f72c02e987f63d1ac185013ec8cff
+      size: 11990
+  train_lda:
+    cmd: python models/custom_train/train_lda.py
+    deps:
+    - path: models/custom_train/train_lda.py
+      md5: ad80595d754c68091b4a4f2e855989fe
+      size: 1000
+    - path: utils
+      md5: 9787c4ffeca5952efef71797ed770a70.dir
+      size: 9088
+      nfiles: 6
+    outs:
+    - path: resources/models/serialized/lda.pkl
+      md5: 4e0c99bedc1d3b77460d4953750fb542
+      size: 13833

@@ -4,3 +4,5 @@
 /xgboost_calibrated.pkl
 /gaussian_nb.pkl
 /lda.pkl
+/gaussian_nb_calibrated.pkl
+/neural_network.pkl

@@ -5,14 +5,14 @@ sys.path.append(os.path.abspath(os.getcwd()))
 import logging
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from utils.io import load_data, save_pickle
-from models.utils.metrics import get_metrics
+from models.lib.utils.metrics import get_metrics
 
 logger = logging.getLogger(__name__)
 
 
 def main():
     data_input_path = "resources/data/reduced"
-    model_output_path = "resources/models/serialized/gaussian_nb.pkl"
+    model_output_path = "resources/models/serialized/lda.pkl"
 
     X_train, y_train, X_valid, y_valid, X_test, y_test = load_data(
         data_input_path

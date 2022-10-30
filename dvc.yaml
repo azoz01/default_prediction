@@ -76,13 +76,34 @@ stages:
     outs:
     - ${paths.models.serialized}/${train_model.model_name}.pkl
     - ${paths.models.parameters}/${train_model.model_name}.json
+  train_gaussian_nb:
+    cmd: python models/custom_train/train_gaussian_nb.py
+    deps:
+    - models/custom_train/train_gaussian_nb.py
+    - utils
+    outs:
+    - ${paths.models.serialized}/gaussian_nb.pkl
+  train_lda:
+    cmd: python models/custom_train/train_lda.py
+    deps:
+    - models/custom_train/train_lda.py
+    - utils
+    outs:
+    - ${paths.models.serialized}/lda.pkl
+  train_neural_network:
+    cmd: python models/custom_train/train_neural_network.py
+    deps:
+    - models/custom_train/train_neural_network.py
+    - utils
+    outs:
+    - ${paths.models.serialized}/neural_network.pkl
   calibrate_model:
     cmd: python models/bin/calibrate_model.py
     deps:
-    - ${calibrate_model.model_input_path}
+    - ${paths.models.serialized}/gaussian_nb.pkl
     - models/bin/calibrate_model.py
     - utils
     params:
     - calibrate_model
     outs:
-    - ${calibrate_model.model_output_path}
+    - ${paths.models.serialized}/gaussian_nb_calibrated.pkl

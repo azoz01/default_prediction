@@ -5,7 +5,7 @@ sys.path.append(os.path.abspath(os.getcwd()))
 
 from typing import Dict
 from xgboost import XGBClassifier
-from models.utils.optimize_model import optimize_model
+from models.lib.utils.optimize_model import optimize_model
 
 
 def define_model(trial):
