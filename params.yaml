@@ -2,6 +2,7 @@ paths:
   data:
     raw: "resources/data/raw"
     splitted: "resources/data/splitted"
+    initially_preprocessed: "resources/data/initially_preprocessed"
     clean: "resources/data/clean"
     transformed_numerical_columns: "resources/data/transformed_numerical_columns"
     balanced: "resources/data/balanced"
@@ -10,6 +11,8 @@ paths:
     data_state: "resources/data/data_state.json"
   pipelines:
     serialized: "resources/pipelines/serialized"
+    studies: "resources/pipelines/studies"
+    parameters: "resources/pipelines/parameters"
   models:
     serialized: "resources/models/serialized"
     parameters: "resources/models/parameters"
@@ -20,12 +23,18 @@ split_data:
   test_size: 0.15
   valid_size: 0.15
 
+clean_data:
+  method: "model_based"
+
+model_based_imputation:
+  hyperparams_cat_dict_path: "resources/pipelines/parameters/hyperparams_cat_dict.json"
+  hyperparams_reg_dict_path: "resources/pipelines/parameters/hyperparams_num_dict.json"
+
 balance_data:
   method: "oversample"
 
 transform_categorical_columns:
   method: "one_hot"
-
 
 category_embedding:
   embedder_n_epochs: 5

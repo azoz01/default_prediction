@@ -4,16 +4,16 @@ stages:
     cmd: python pipelines/bin/split_data.py
     deps:
     - path: pipelines/bin/split_data.py
-      md5: cb32cccd9a38866eae0df20bba41e761
-      size: 1669
+      md5: 147d98da589e277d5e079c30a47b0a1a
+      size: 1936
     - path: resources/data/raw
       md5: d7b249e098f4dc55aae557e066c9563c.dir
       size: 85166965
       nfiles: 7
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     params:
       params.yaml:
         split_data.random_state: 42
@@ -21,31 +21,31 @@ stages:
         split_data.valid_size: 0.15
     outs:
     - path: resources/data/splitted
-      md5: 5d03e4c07c60e4880b2495e45b998e3a.dir
-      size: 28128421
+      md5: 66957dd1526592edabb9dff07ef2d723.dir
+      size: 24240491
       nfiles: 6
   clean:
     cmd: python pipelines/bin/clean_data.py
     deps:
     - path: pipelines/bin/clean_data.py
-      md5: 51050f628342d087ca28fd8dffb42736
-      size: 1037
-    - path: resources/data/splitted
-      md5: 5d03e4c07c60e4880b2495e45b998e3a.dir
-      size: 28128421
+      md5: 90676da6440d086a70483327e2c54732
+      size: 1805
+    - path: resources/data/initially_preprocessed
+      md5: 5fe6bed1eb17b213ff2ccade052e28c6.dir
+      size: 20111089
       nfiles: 6
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     outs:
     - path: resources/data/clean
-      md5: 5425727cca4f8ea4a9b85d54185221e9.dir
-      size: 23328273
+      md5: 538741f08e6f7780463e99155c5120b0.dir
+      size: 29300094
       nfiles: 6
     - path: resources/pipelines/serialized/data_cleaner.pkl
-      md5: 0be635819344a82abf81ca274bb1e3cd
-      size: 8709
+      md5: c2c56607c8d27a33bfca2cd7c9b2e064
+      size: 3798199
   transform_numerical_columns:
     cmd: python pipelines/bin/transform_numerical_columns.py
     deps:
@@ -53,20 +53,20 @@ stages:
       md5: 341b3fe08e3afdf02847895fb1ed3992
       size: 1174
     - path: resources/data/clean
-      md5: 5425727cca4f8ea4a9b85d54185221e9.dir
-      size: 23328273
+      md5: 538741f08e6f7780463e99155c5120b0.dir
+      size: 29300094
       nfiles: 6
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     outs:
     - path: resources/data/transformed_numerical_columns
-      md5: 61b61818d3028e44ceda96f87a277741.dir
-      size: 22019960
+      md5: a9c594c0a5d4ad42fbde512747ce9666.dir
+      size: 27881995
       nfiles: 6
     - path: resources/pipelines/serialized/numerical_columns_transformer.pkl
-      md5: b2f0cfe696543ee1ccbcd2a291a4650b
+      md5: bf8907676172caa80a210d203851e196
       size: 7157
   balance_data:
     cmd: python pipelines/bin/balance_data.py
@@ -79,20 +79,20 @@ stages:
       size: 1688
       nfiles: 4
     - path: resources/data/transformed_numerical_columns
-      md5: 61b61818d3028e44ceda96f87a277741.dir
-      size: 22019960
+      md5: a9c594c0a5d4ad42fbde512747ce9666.dir
+      size: 27881995
       nfiles: 6
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     params:
       params.yaml:
         balance_data.method: oversample
     outs:
     - path: resources/data/balanced
-      md5: 091cb82418a289d0a2c288fe2eee9c5f.dir
-      size: 31896810
+      md5: f9be8659cbc182cae8b14194f50f06d3.dir
+      size: 41424376
       nfiles: 6
   transform_categorical_columns:
     cmd: python pipelines/bin/transform_categorical_columns.py
@@ -101,13 +101,13 @@ stages:
       md5: 53dd486039e1c31ce3fd88cd7a12f503
       size: 2031
     - path: resources/data/balanced
-      md5: 091cb82418a289d0a2c288fe2eee9c5f.dir
-      size: 31896810
+      md5: f9be8659cbc182cae8b14194f50f06d3.dir
+      size: 41424376
       nfiles: 6
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     params:
       params.yaml:
         category_embedding:
@@ -116,12 +116,12 @@ stages:
         transform_categorical_columns.method: one_hot
     outs:
     - path: resources/data/categorical_transformed
-      md5: 1e6cf58c5a7726caafbaacc46f8f5928.dir
-      size: 24044788
+      md5: add40e5bbb39e9643b75e1a8c21419d5.dir
+      size: 30253882
       nfiles: 6
     - path: resources/pipelines/serialized/categorical_columns_transformer.pkl
-      md5: 06790500bd7a1ba026411e8d1b5027e6
-      size: 8795
+      md5: 9a8ce0905cd972dda289860851f6b95f
+      size: 8813
   reduce_data:
     cmd: python pipelines/bin/reduce_data.py
     deps:
@@ -129,13 +129,13 @@ stages:
       md5: b9132d976f34ce9e4f06b585655598d2
       size: 1643
     - path: resources/data/categorical_transformed
-      md5: 1e6cf58c5a7726caafbaacc46f8f5928.dir
-      size: 24044788
+      md5: add40e5bbb39e9643b75e1a8c21419d5.dir
+      size: 30253882
       nfiles: 6
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     params:
       params.yaml:
         frufs:
@@ -145,12 +145,12 @@ stages:
           output_n_cols: 200
     outs:
     - path: resources/data/reduced
-      md5: 5b52a4f97ab995c9b57e2be47de7aa63.dir
-      size: 23159422
+      md5: 2fe640fb0d3328d7943805f53de79590.dir
+      size: 29314002
       nfiles: 6
     - path: resources/pipelines/serialized/data_reductor.pkl
-      md5: b94ee0fdc4afbb4d24bab06382c5618f
-      size: 85331
+      md5: 3bc91848d026825faf42bc864cb62fc4
+      size: 99158
   train_model:
     cmd: python models/bin/train_model.py
     deps:
@@ -161,9 +161,9 @@ stages:
       md5: caeddadf9b8b258a11a49ee66e1d8543
       size: 995328
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     params:
       params.yaml:
         train_model:
@@ -177,8 +177,8 @@ stages:
       md5: f4af700615c2abb682f106c3b9b528f9
       size: 1093
     - path: resources/models/serialized/xgboost.pkl
-      md5: e8d06afb6c50a1fa9a0907861a1d05c3
-      size: 150368
+      md5: 089c30fe47bac086670ca66052b3c438
+      size: 150383
   calibrate_model:
     cmd: python models/bin/calibrate_model.py
     deps:
@@ -186,12 +186,12 @@ stages:
       md5: ee409a1c6e3b0c5a06781805e2d6c6b5
       size: 1152
     - path: resources/models/serialized/xgboost.pkl
-      md5: e8d06afb6c50a1fa9a0907861a1d05c3
-      size: 150368
+      md5: 089c30fe47bac086670ca66052b3c438
+      size: 150383
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     params:
       params.yaml:
         calibrate_model:
@@ -201,8 +201,8 @@ stages:
           calibration_method: isotonic
     outs:
     - path: resources/models/serialized/xgboost_calibrated.pkl
-      md5: 6a1cb3851186e5a59275016f7314710e
-      size: 183888
+      md5: c05e0c2b72580d81f864ae8a65e90661
+      size: 191103
   train_gaussian_nb:
     cmd: python models/custom_train/train_gaussian_nb.py
     deps:
@@ -210,9 +210,9 @@ stages:
       md5: 1a36d2b8df8c5d431c31f4ce6bb6618e
       size: 1360
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     outs:
     - path: resources/models/serialized/gaussian_nb.pkl
       md5: d63f72c02e987f63d1ac185013ec8cff
@@ -224,9 +224,9 @@ stages:
       md5: 94cd11bc12ab1790b849e9e077c69df5
       size: 1412
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     outs:
     - path: resources/models/serialized/lda.pkl
       md5: 4e0c99bedc1d3b77460d4953750fb542
@@ -238,10 +238,29 @@ stages:
       md5: 4ab95308d6002a15879f5a7828e89b8c
       size: 1108
     - path: utils
-      md5: 491500b859ca418da1e2336055faba25.dir
-      size: 10922
-      nfiles: 6
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
     outs:
     - path: resources/models/serialized/neural_network.pkl
       md5: 359f07796ed18ac9fcf6b0716e993f08
       size: 5312168
+  initial_preprocessing:
+    cmd: python pipelines/bin/initial_preprocessing.py
+    deps:
+    - path: pipelines/bin/initial_preprocessing.py
+      md5: 42db8d1914892da041bfcc526f291192
+      size: 1036
+    - path: resources/data/splitted
+      md5: 66957dd1526592edabb9dff07ef2d723.dir
+      size: 24240491
+      nfiles: 6
+    - path: utils
+      md5: 1a055da60c29f0ea270f85b68c553955.dir
+      size: 13741
+      nfiles: 8
+    outs:
+    - path: resources/data/initially_preprocessed
+      md5: 5fe6bed1eb17b213ff2ccade052e28c6.dir
+      size: 20111089
+      nfiles: 6

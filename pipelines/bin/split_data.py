@@ -49,6 +49,13 @@ def main() -> None:
         random_state=42,
     )
 
+    X_train = X_train.reset_index(drop=True)
+    y_train = y_train.reset_index(drop=True)
+    X_valid = X_valid.reset_index(drop=True)
+    y_valid = y_valid.reset_index(drop=True)
+    X_test = X_test.reset_index(drop=True)
+    y_test = y_test.reset_index(drop=True)
+
     save_data(
         path=output_path,
         X_train=X_train,

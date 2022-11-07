@@ -1,6 +1,7 @@
 /splitted
 /clean
 /transformed_numerical_columns
+/initially_preprocessed
 /balanced
 /categorical_transformed
 /reduced

@@ -6,24 +6,17 @@ from ..null_removal import *
 from .. import constants
 
 
-class MissingDataRemovalPipeline(TransformerMixin):
+class FixedValueImputationPipeline(TransformerMixin):
     """
     Pipeline responsible for removal missing data. It applies:
-        * dropping irrelevant columns
         * median imputation
         * imputation of 0 and -1
         * mode imputation
     """
 
     def __init__(self):
-        self.missing_data_removal_pipeline: Pipeline = Pipeline(
+        self.fixed_value_imputation_pipeline: Pipeline = Pipeline(
             [
-                (
-                    "irrelevant_columns_dropper",
-                    IrrelevantColumnsDropper(
-                        columns_to_drop=constants.COLUMNS_TO_DROP
-                    ),
-                ),
                 (
                     "median_imputer",
                     MedianImputer(
@@ -76,7 +69,7 @@ class MissingDataRemovalPipeline(TransformerMixin):
             X (pd.DataFrame): X to fit
             y (pd.DataFrame, optional): y to fit. Defaults to None.
         """
-        self.missing_data_removal_pipeline.fit(X)
+        self.fixed_value_imputation_pipeline.fit(X)
         return self
 
     def transform(
@@ -92,7 +85,7 @@ class MissingDataRemovalPipeline(TransformerMixin):
         Returns:
             Tuple[pd.DataFrame, pd.DataFrame]: Transformed X and y
         """
-        X = self.missing_data_removal_pipeline.transform(X)
+        X = self.fixed_value_imputation_pipeline.transform(X)
         if y is None:
             return X
         X, y = self.rows_with_missing_data_dropper.transform(X, y)

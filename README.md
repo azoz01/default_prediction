@@ -25,7 +25,7 @@ _Metrics on train and test sets were similar, so models aren't overfitted._
 
 ## Pipelines processing data
 * **split_data** - splits data into training, validation and test ests
-* **clean** - removes missing values from data using mean, median, mode and fixed values imputations (depends on column)
+* **clean** - removes missing values from data using mean, median, mode and fixed values imputations (depends on column). Other available technique is model-based imputation, when missing values are predicted using decision tree.
 * **transform_numerical_columns** - reduces skewness using power transform and standarizes using z-score scaling
 * **balance_data** - dataset is highly imbalanced (8% of positives). This step makes it balanced. With proper configuration can be skipped. Now available options are SMOTENC [1] and oversampling.
 * **transform_categorical_columns** - transforms categorical variables to numerical features. Now available options are: one-hot encoding and Category embedding [2]
@@ -33,7 +33,7 @@ _Metrics on train and test sets were similar, so models aren't overfitted._
 
 ## Current model specs
 **Preprocessing**: 
-1. clean 
+1. model-based data imputation
 2. transform_numerical_columns 
 3. no_balance_data 
 4. one-hot encoding 
@@ -73,3 +73,4 @@ in order to start Mlflow tracking server.
 
 [3] https://www.deepwizai.com/projects/how-to-perform-unsupervised-feature-selection-using-supervised-algorithms
 
+[4] https://arxiv.org/abs/2007.02837 - guided during choose of imputation method

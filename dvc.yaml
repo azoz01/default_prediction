@@ -11,10 +11,18 @@ stages:
     - split_data.random_state
     outs:
     - ${paths.data.splitted}
+  initial_preprocessing:
+    cmd: python pipelines/bin/initial_preprocessing.py
+    deps:
+    - ${paths.data.splitted}
+    - pipelines/bin/initial_preprocessing.py
+    - utils
+    outs:
+    - ${paths.data.initially_preprocessed}
   clean:
     cmd: python pipelines/bin/clean_data.py
     deps:
-    - ${paths.data.splitted}
+    - ${paths.data.initially_preprocessed}
     - pipelines/bin/clean_data.py
     - utils
     outs:

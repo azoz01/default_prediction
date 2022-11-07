@@ -1,7 +1,7 @@
 __all__ = [
-    "MissingDataRemovalPipeline",
+    "FixedValueImputationPipeline",
     "NumericalTransformations",
 ]
 
-from .missing_data_removal_pipeline import MissingDataRemovalPipeline
+from .fixed_values_imputation_pipeline import FixedValueImputationPipeline
 from .numerical_transformations import NumericalTransformations
