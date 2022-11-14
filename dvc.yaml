@@ -1,69 +1,80 @@
 stages:
-  split_data:
-    cmd: python pipelines/bin/split_data.py
+
+  initial_preprocessing:
+    cmd: python preprocessing/bin/initial_preprocessing.py
     deps:
     - ${paths.data.raw}
-    - pipelines/bin/split_data.py
+    - preprocessing/bin/initial_preprocessing.py
+    - preprocessing/lib/cleaning/initial_preprocessing.py
+    - utils
+    outs:
+    - ${paths.data.initially_preprocessed}/loan.parquet
+    - ${paths.preprocessing.serialized}/initial_preprocessor.pkl
+
+  split:
+    cmd: python preprocessing/bin/split.py
+    deps:
+    - ${paths.data.initially_preprocessed}
+    - preprocessing/bin/split.py
     - utils
     params:
-    - split_data.valid_size
-    - split_data.test_size
-    - split_data.random_state
+    - split_data
     outs:
     - ${paths.data.splitted}
-  initial_preprocessing:
-    cmd: python pipelines/bin/initial_preprocessing.py
+
+  impute:
+    cmd: python preprocessing/bin/impute.py
     deps:
     - ${paths.data.splitted}
-    - pipelines/bin/initial_preprocessing.py
-    - utils
-    outs:
-    - ${paths.data.initially_preprocessed}
-  clean:
-    cmd: python pipelines/bin/clean_data.py
-    deps:
-    - ${paths.data.initially_preprocessed}
-    - pipelines/bin/clean_data.py
+    - preprocessing/bin/impute.py
+    - preprocessing/lib/cleaning/imputation.py
     - utils
     outs:
     - ${paths.data.clean}
-    - ${paths.pipelines.serialized}/data_cleaner.pkl
+    - ${paths.preprocessing.serialized}/imputer.pkl
+
   transform_numerical_columns:
-    cmd: python pipelines/bin/transform_numerical_columns.py
+    cmd: python preprocessing/bin/transform_numerical_columns.py
     deps:
     - ${paths.data.clean}
-    - pipelines/bin/transform_numerical_columns.py
+    - preprocessing/bin/transform_numerical_columns.py
+    - preprocessing/lib/numerical/numerical_columns_preprocessing.py
     - utils
     outs:
     - ${paths.data.transformed_numerical_columns}
-    - ${paths.pipelines.serialized}/numerical_columns_transformer.pkl
-  balance_data:
-    cmd: python pipelines/bin/balance_data.py
+    - ${paths.preprocessing.serialized}/numerical_columns_transformer.pkl
+  
+  balance:
+    cmd: python preprocessing/bin/balance.py
     deps:
     - ${paths.data.transformed_numerical_columns}
-    - pipelines/bin/balance_data.py
-    - pipelines/lib/data_balance
+    - preprocessing/bin/balance.py
+    - preprocessing/lib/balance_data
     - utils
     params:
-    - balance_data.method
+    - balance_data
     outs:
     - ${paths.data.balanced}
+  
   transform_categorical_columns:
-    cmd: python pipelines/bin/transform_categorical_columns.py
+    cmd: python preprocessing/bin/transform_categorical_columns.py
     deps:
     - ${paths.data.balanced}
-    - pipelines/bin/transform_categorical_columns.py
+    - preprocessing/bin/transform_categorical_columns.py
+    - preprocessing/lib/categorical
     - utils
     params:
     - category_embedding
-    - transform_categorical_columns.method
+    - transform_categorical_columns
     outs:
     - ${paths.data.transformed_categorical_columns}
-    - ${paths.pipelines.serialized}/categorical_columns_transformer.pkl
-  reduce_data:
-    cmd: python pipelines/bin/reduce_data.py
+    - ${paths.preprocessing.serialized}/categorical_columns_transformer.pkl
+  
+  reduce:
+    cmd: python preprocessing/bin/reduce.py
     deps:
-    - pipelines/bin/reduce_data.py
+    - preprocessing/bin/reduce.py
+    - preprocessing/lib/feature_selection
     - ${paths.data.transformed_categorical_columns}
     - utils
     params:
@@ -72,7 +83,8 @@ stages:
     - reduce_data.method
     outs:
     - ${paths.data.reduced}
-    - ${paths.pipelines.serialized}/data_reductor.pkl
+    - ${paths.preprocessing.serialized}/data_reductor.pkl
+
   train_model:
     cmd: python models/bin/train_model.py
     deps:

@@ -1,7 +1,7 @@
-pipelines_paths:
-  - "resources/pipelines/serialized/data_cleaner.pkl"
-  - "resources/pipelines/serialized/numerical_columns_transformer.pkl"
-  - "resources/pipelines/serialized/categorical_columns_transformer.pkl"
-  - "resources/pipelines/serialized/data_reductor.pkl"
+preprocessing_paths:
+  - "resources/preprocessing/serialized/data_cleaner.pkl"
+  - "resources/preprocessing/serialized/numerical_columns_transformer.pkl"
+  - "resources/preprocessing/serialized/categorical_columns_transformer.pkl"
+  - "resources/preprocessing/serialized/data_reductor.pkl"
 
 model_path: "resources/models/serialized/xgboost_calibrated.pkl"

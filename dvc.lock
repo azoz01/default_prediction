@@ -24,50 +24,31 @@ stages:
       md5: 66957dd1526592edabb9dff07ef2d723.dir
       size: 24240491
       nfiles: 6
-  clean:
-    cmd: python pipelines/bin/clean_data.py
-    deps:
-    - path: pipelines/bin/clean_data.py
-      md5: 90676da6440d086a70483327e2c54732
-      size: 1805
-    - path: resources/data/initially_preprocessed
-      md5: 5fe6bed1eb17b213ff2ccade052e28c6.dir
-      size: 20111089
-      nfiles: 6
-    - path: utils
-      md5: 1a055da60c29f0ea270f85b68c553955.dir
-      size: 13741
-      nfiles: 8
-    outs:
-    - path: resources/data/clean
-      md5: 538741f08e6f7780463e99155c5120b0.dir
-      size: 29300094
-      nfiles: 6
-    - path: resources/pipelines/serialized/data_cleaner.pkl
-      md5: c2c56607c8d27a33bfca2cd7c9b2e064
-      size: 3798199
   transform_numerical_columns:
-    cmd: python pipelines/bin/transform_numerical_columns.py
+    cmd: python preprocessing/bin/transform_numerical_columns.py
     deps:
-    - path: pipelines/bin/transform_numerical_columns.py
-      md5: 341b3fe08e3afdf02847895fb1ed3992
-      size: 1174
+    - path: preprocessing/bin/transform_numerical_columns.py
+      md5: f1d887d6386e1180862c340d9cafab13
+      size: 1129
+    - path: preprocessing/lib/numerical/numerical_columns_preprocessing.py
+      md5: b86f2de473d326f047b74ccdae19202e
+      size: 3307
     - path: resources/data/clean
-      md5: 538741f08e6f7780463e99155c5120b0.dir
-      size: 29300094
+      md5: 4de35af4d9d2ea2c20d9ad83c05a222b.dir
+      size: 18004782
       nfiles: 6
     - path: utils
-      md5: 1a055da60c29f0ea270f85b68c553955.dir
-      size: 13741
-      nfiles: 8
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
     outs:
     - path: resources/data/transformed_numerical_columns
-      md5: a9c594c0a5d4ad42fbde512747ce9666.dir
-      size: 27881995
+      md5: a558c012934b79e492f5eccb449c69d8.dir
+      size: 20485654
       nfiles: 6
-    - path: resources/pipelines/serialized/numerical_columns_transformer.pkl
-      md5: bf8907676172caa80a210d203851e196
-      size: 7157
+    - path: resources/preprocessing/serialized/numerical_columns_transformer.pkl
+      md5: 13b7558695d365a60717341deb8ddb0d
+      size: 4739
   balance_data:
     cmd: python pipelines/bin/balance_data.py
     deps:
@@ -95,33 +76,38 @@ stages:
       size: 41424376
       nfiles: 6
   transform_categorical_columns:
-    cmd: python pipelines/bin/transform_categorical_columns.py
+    cmd: python preprocessing/bin/transform_categorical_columns.py
     deps:
-    - path: pipelines/bin/transform_categorical_columns.py
-      md5: 53dd486039e1c31ce3fd88cd7a12f503
-      size: 2031
+    - path: preprocessing/bin/transform_categorical_columns.py
+      md5: e3d9c7769bd8640ac3d3e9e79f33dcee
+      size: 1513
+    - path: preprocessing/lib/categorical
+      md5: df11bbbe3ff6c387f71016590c68758c.dir
+      size: 23431
+      nfiles: 6
     - path: resources/data/balanced
-      md5: f9be8659cbc182cae8b14194f50f06d3.dir
-      size: 41424376
+      md5: 119dd853509549b2c401a52fe850323b.dir
+      size: 27420746
       nfiles: 6
     - path: utils
-      md5: 1a055da60c29f0ea270f85b68c553955.dir
-      size: 13741
-      nfiles: 8
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
     params:
       params.yaml:
         category_embedding:
           embedder_n_epochs: 5
           embedder_num_layers: 2
-        transform_categorical_columns.method: one_hot
+        transform_categorical_columns:
+          method: one_hot
     outs:
-    - path: resources/data/categorical_transformed
-      md5: add40e5bbb39e9643b75e1a8c21419d5.dir
-      size: 30253882
+    - path: resources/data/transformed_categorical_column
+      md5: c2d5d7ff41d8743fbfc300fe743eb6ef.dir
+      size: 21101506
       nfiles: 6
-    - path: resources/pipelines/serialized/categorical_columns_transformer.pkl
-      md5: 9a8ce0905cd972dda289860851f6b95f
-      size: 8813
+    - path: resources/preprocessing/serialized/categorical_columns_transformer.pkl
+      md5: 90eb712c901b55dcb6de92a453296744
+      size: 3050
   reduce_data:
     cmd: python pipelines/bin/reduce_data.py
     deps:
@@ -246,21 +232,136 @@ stages:
       md5: 359f07796ed18ac9fcf6b0716e993f08
       size: 5312168
   initial_preprocessing:
-    cmd: python pipelines/bin/initial_preprocessing.py
+    cmd: python preprocessing/bin/initial_preprocessing.py
     deps:
-    - path: pipelines/bin/initial_preprocessing.py
-      md5: 42db8d1914892da041bfcc526f291192
-      size: 1036
+    - path: preprocessing/bin/initial_preprocessing.py
+      md5: 7d93dccaef62a5e2cf77d59ec33acb5c
+      size: 1362
+    - path: preprocessing/lib/cleaning/initial_preprocessing.py
+      md5: 1415793fe82d93bd0de9c7cfbb78feb4
+      size: 2804
+    - path: resources/data/raw
+      md5: e14a5e77aa1b021859b8c26884c4b52a.dir
+      size: 441777230
+      nfiles: 5
+    - path: utils
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
+    outs:
+    - path: resources/data/initially_preprocessed/loan.parquet
+      md5: 569acb2349298a061fef29a9802eb2b2
+      size: 20556346
+    - path: resources/preprocessing/serialized/initial_preprocessor.pkl
+      md5: 70cc6aa774bb3886ac0f8fa2ef3c64cb
+      size: 921
+  split:
+    cmd: python preprocessing/bin/split.py
+    deps:
+    - path: preprocessing/bin/split.py
+      md5: 660aeeef35a4b253e63393d57b9c746a
+      size: 1639
+    - path: resources/data/initially_preprocessed
+      md5: 0b63b1098911cfee1685409dfc4f9e68.dir
+      size: 20556346
+      nfiles: 1
+    - path: utils
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
+    params:
+      params.yaml:
+        split_data:
+          random_state: 42
+          test_size: 0.15
+          valid_size: 0.15
+    outs:
     - path: resources/data/splitted
-      md5: 66957dd1526592edabb9dff07ef2d723.dir
-      size: 24240491
+      md5: 0771f6a9cc97612f3bb777a4f39d1e2e.dir
+      size: 20747117
+      nfiles: 6
+  impute:
+    cmd: python preprocessing/bin/impute.py
+    deps:
+    - path: preprocessing/bin/impute.py
+      md5: c37c5da5fb139c6efb91ad4fc674bad9
+      size: 1058
+    - path: preprocessing/lib/cleaning/imputation.py
+      md5: 3464aa87bffafb721a239601aa375bf8
+      size: 6709
+    - path: resources/data/splitted
+      md5: 0771f6a9cc97612f3bb777a4f39d1e2e.dir
+      size: 20747117
       nfiles: 6
     - path: utils
-      md5: 1a055da60c29f0ea270f85b68c553955.dir
-      size: 13741
-      nfiles: 8
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
     outs:
-    - path: resources/data/initially_preprocessed
-      md5: 5fe6bed1eb17b213ff2ccade052e28c6.dir
-      size: 20111089
+    - path: resources/data/clean
+      md5: 4de35af4d9d2ea2c20d9ad83c05a222b.dir
+      size: 18004782
       nfiles: 6
+    - path: resources/preprocessing/serialized/imputer.pkl
+      md5: a2c9ad9deb5ed0bd75d0e9dbc92685e6
+      size: 61279348
+  balance:
+    cmd: python preprocessing/bin/balance.py
+    deps:
+    - path: preprocessing/bin/balance.py
+      md5: 3dad15be626bb5e122c89c9de02bb614
+      size: 1059
+    - path: preprocessing/lib/balance_data
+      md5: af30dc62b346b676846883bba0763a6e.dir
+      size: 1691
+      nfiles: 4
+    - path: resources/data/transformed_numerical_columns
+      md5: a558c012934b79e492f5eccb449c69d8.dir
+      size: 20485654
+      nfiles: 6
+    - path: utils
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
+    params:
+      params.yaml:
+        balance_data:
+          method: oversample
+    outs:
+    - path: resources/data/balanced
+      md5: 119dd853509549b2c401a52fe850323b.dir
+      size: 27420746
+      nfiles: 6
+  reduce:
+    cmd: python preprocessing/bin/reduce.py
+    deps:
+    - path: preprocessing/bin/reduce.py
+      md5: 69cf87f90c5e985d28f8e778ced31db8
+      size: 1227
+    - path: preprocessing/lib/feature_selection
+      md5: 2e91f38e5d0ae332ec4ee9b735145480.dir
+      size: 4532
+      nfiles: 6
+    - path: resources/data/transformed_categorical_column
+      md5: c2d5d7ff41d8743fbfc300fe743eb6ef.dir
+      size: 21101506
+      nfiles: 6
+    - path: utils
+      md5: 26605127661aa31fd678281a39ce0510.dir
+      size: 34768
+      nfiles: 13
+    params:
+      params.yaml:
+        frufs:
+          output_n_cols: 70
+        reduce_data.method: rfe
+        rfe:
+          output_n_cols: 70
+    outs:
+    - path: resources/data/reduced
+      md5: 5b797bab98630684c1b38372a10bc6e9.dir
+      size: 20716577
+      nfiles: 6
+    - path: resources/preprocessing/serialized/data_reductor.pkl
+      md5: 7b117fbfb3f65b906360c9fa07887118
+      size: 78112

@@ -6,13 +6,13 @@ paths:
     clean: "resources/data/clean"
     transformed_numerical_columns: "resources/data/transformed_numerical_columns"
     balanced: "resources/data/balanced"
-    transformed_categorical_columns: "resources/data/categorical_transformed"
+    transformed_categorical_columns: "resources/data/transformed_categorical_column"
     reduced: "resources/data/reduced"
     data_state: "resources/data/data_state.json"
-  pipelines:
-    serialized: "resources/pipelines/serialized"
-    studies: "resources/pipelines/studies"
-    parameters: "resources/pipelines/parameters"
+  preprocessing:
+    serialized: "resources/preprocessing/serialized"
+    studies: "resources/preprocessing/studies"
+    parameters: "resources/preprocessing/parameters"
   models:
     serialized: "resources/models/serialized"
     parameters: "resources/models/parameters"
@@ -22,13 +22,6 @@ split_data:
   random_state: 42
   test_size: 0.15
   valid_size: 0.15
-
-clean_data:
-  method: "model_based"
-
-model_based_imputation:
-  hyperparams_cat_dict_path: "resources/pipelines/parameters/hyperparams_cat_dict.json"
-  hyperparams_reg_dict_path: "resources/pipelines/parameters/hyperparams_num_dict.json"
 
 balance_data:
   method: "oversample"
@@ -44,10 +37,10 @@ reduce_data:
   method: "rfe"
 
 frufs:
-  output_n_cols: 200
+  output_n_cols: 70
 
 rfe:
-  output_n_cols: 200
+  output_n_cols: 70
 
 train_model:
   study_input_path: "resources/models/studies/xgboost/xgboost-2022-10-20-22_10_35.db"

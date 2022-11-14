@@ -9,7 +9,7 @@ WORKDIR /code/default_prediction
 RUN git checkout develop
 
 RUN pip install --no-cache-dir -r requirements.txt
-RUN dvc pull -r google_storage resources/pipelines/serialized/*
+RUN dvc pull -r google_storage resources/preprocessing/serialized/*
 RUN dvc pull -r google_storage resources/models/serialized/*
 
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "80"]

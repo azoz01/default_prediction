@@ -4,7 +4,7 @@ import os
 __all__ = [
     "get_parameters",
     "get_data_path",
-    "get_pipelines_path",
+    "get_preprocessing_path",
     "get_models_path",
     "load_data",
     "save_data",
