@@ -365,3 +365,36 @@ stages:
     - path: resources/preprocessing/serialized/data_reductor.pkl
       md5: ca5b50800024b47907494dd7718eae58
       size: 59
+  build_final_model:
+    cmd: python models/bin/utils/build_final_model.py
+    deps:
+    - path: models/bin/utils/build_final_model.py
+      md5: 1277b1448710bce59b61a152f4112a54
+      size: 1026
+    - path: resources/models/serialized/xgboost_calibrated.pkl
+      md5: bf38d1da3215c366e4456e40d627b8ac
+      size: 867221
+    - path: resources/preprocessing/serialized
+      md5: 169e766fbf0d14ee1bbc82af6dcd60e8.dir
+      size: 50542702
+      nfiles: 5
+    - path: utils
+      md5: a4e97556d2397fb52f87e872580105f3.dir
+      size: 27389
+      nfiles: 13
+    params:
+      params.yaml:
+        build_final_model:
+          pipelines:
+          - resources/preprocessing/serialized/initial_preprocessor.pkl
+          - resources/preprocessing/serialized/imputer.pkl
+          - resources/preprocessing/serialized/numerical_columns_transformer.pkl
+          - resources/preprocessing/serialized/categorical_columns_transformer.pkl
+          - resources/preprocessing/serialized/data_reductor.pkl
+          model: resources/models/serialized/xgboost_calibrated.pkl
+          output_path: resources/models/final/model.pkl
+          publish_experiment_id: 3
+    outs:
+    - path: resources/models/final/model.pkl
+      md5: fea4577a552d28e42702a79ec21e4b10
+      size: 51410768

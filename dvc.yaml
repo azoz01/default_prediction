@@ -45,7 +45,7 @@ stages:
     outs:
     - ${paths.data.transformed_numerical_columns}
     - ${paths.preprocessing.serialized}/numerical_columns_transformer.pkl
-  
+
   balance:
     cmd: python preprocessing/bin/balance.py
     deps:
@@ -57,7 +57,7 @@ stages:
     - balance_data
     outs:
     - ${paths.data.balanced}
-  
+
   transform_categorical_columns:
     cmd: python preprocessing/bin/transform_categorical_columns.py
     deps:
@@ -71,7 +71,7 @@ stages:
     outs:
     - ${paths.data.transformed_categorical_columns}
     - ${paths.preprocessing.serialized}/categorical_columns_transformer.pkl
-  
+
   reduce:
     cmd: python preprocessing/bin/reduce.py
     deps:
@@ -108,3 +108,14 @@ stages:
     - calibrate_model
     outs:
     - ${calibrate_model.model_output_path}
+  build_final_model:
+    cmd: python models/bin/utils/build_final_model.py
+    deps:
+    - ${calibrate_model.model_output_path}
+    - ${paths.preprocessing.serialized}
+    - models/bin/utils/build_final_model.py
+    - utils
+    params:
+    - build_final_model
+    outs:
+    - resources/models/final/model.pkl
