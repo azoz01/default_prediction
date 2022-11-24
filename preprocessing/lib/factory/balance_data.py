@@ -6,6 +6,10 @@ from preprocessing.lib.dummy import DummyPipeline
 
 
 class OversampleFactory:
+    """
+    Factory of oversampling methods
+    """
+
     def __init__(self) -> None:
         self.oversample_methods = {
             "oversample": RandomOverSampler,

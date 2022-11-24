@@ -1,6 +1,10 @@
 import logging
 import pandas as pd
-from utils.parameters import get_data_path, get_preprocessing_path
+from utils.parameters import (
+    get_data_path,
+    get_preprocessing_path,
+    get_parameters,
+)
 from preprocessing.lib.numerical import NumericalColumnsPreprocessor
 from preprocessing.utils.generic_pipeline import GenericPipeline
 
@@ -15,9 +19,10 @@ def main():
         get_preprocessing_path("serialized")
         / "numerical_columns_transformer.pkl"
     )
+    parameters = get_parameters("transform_numerical_columns")
 
     pipeline: GenericPipeline = GenericPipeline(
-        transformer=NumericalColumnsPreprocessor(),
+        transformer=NumericalColumnsPreprocessor(**parameters),
         input_path=input_path,
         output_path=output_path,
         serialized_transformer_output_path=serialized_transformer_output_path,

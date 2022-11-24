@@ -7,7 +7,7 @@ from utils.parameters import (
     get_parameters,
     get_preprocessing_path,
 )
-from preprocessing.lib.factory.category_encoding import CategoryEncodingFactory
+from preprocessing.lib.factory.categorical import CategoryEncodingFactory
 from preprocessing.utils.generic_pipeline import GenericPipeline
 
 logger = logging.getLogger(__name__)
@@ -34,6 +34,7 @@ def main():
         input_path=input_path,
         output_path=output_path,
         serialized_transformer_output_path=serialized_transformer_output_path,
+        validate_data=validate_data,
     )
     pipeline.run_pipeline()
     logger.info("Categorical columns transformations pipeline completed")

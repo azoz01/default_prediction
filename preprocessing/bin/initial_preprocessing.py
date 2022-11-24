@@ -36,7 +36,7 @@ def main() -> None:
 
 
 def validate_data(X: pd.DataFrame) -> None:
-    for column in constants.DATA_TO_DROP:
+    for column in constants.COLUMNS_TO_DROP:
         assert (
             column not in X.columns
         ), f"{column} shouldn't be present in dataset"

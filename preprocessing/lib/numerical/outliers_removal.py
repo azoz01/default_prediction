@@ -3,12 +3,16 @@ from typing import Union, Tuple
 from scipy import stats
 import pandas as pd
 from sklearn.base import TransformerMixin
-from utils import constants
 
 
 class OutliersCutter(TransformerMixin):
-    def __init__(self) -> None:
-        self.columns_to_cut_outliers = constants.COLUMNS_TO_CUT_OUTLIERS
+    """
+    Removes outliers from specified numerical columns.
+    As outliers we consider median +/- 1.5*IQR
+    """
+
+    def __init__(self, columns: list[str]) -> None:
+        self.columns_to_cut_outliers = columns
 
     def fit(self, X: pd.DataFrame, y: pd.DataFrame = None) -> OutliersCutter:
         self.outliers_thresholds = {}

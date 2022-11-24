@@ -1,13 +1,17 @@
 from typing import Dict, Any
 from preprocessing.lib.dummy import DummyPipeline
-from preprocessing.lib.categorical import OneHotColumnEncoder, CategoryEmbedder
+from preprocessing.lib.categorical import OneHotColumnEncoder
 
 
 class CategoryEncodingFactory:
+    """
+    Factory of category encoding methods
+    """
+
     def __init__(self) -> None:
         self.encoding_methods = {
             "one_hot": OneHotColumnEncoder,
-            "category_embedding": CategoryEmbedder,
+            # "category_embedding": CategoryEmbedder,
             "passthrough": DummyPipeline,
         }
         self.default_params = {}

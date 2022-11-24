@@ -2,7 +2,7 @@ import logging
 
 from utils.parameters import get_data_path, get_parameters
 from utils.io import load_data, save_data
-from preprocessing.lib.factory.oversample import OversampleFactory
+from preprocessing.lib.factory.balance_data import OversampleFactory
 
 logger = logging.getLogger(__name__)
 

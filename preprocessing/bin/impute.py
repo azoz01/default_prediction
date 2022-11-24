@@ -28,7 +28,9 @@ def main() -> None:
 
 
 def validate_data(X: pd.DataFrame, y: pd.DataFrame = None) -> None:
-    assert (~X.isna()).all(axis=None), "Data contains nulls"
+    missing_cols_idx = X.isna().any(axis=0).values.tolist()
+    cols_with_nulls = X.columns.values[missing_cols_idx]
+    assert (~X.isna()).all(axis=None), f"Data contains nulls {cols_with_nulls}"
 
 
 if __name__ == "__main__":

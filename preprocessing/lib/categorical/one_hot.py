@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import List, Tuple, Union
+import re
 import pandas as pd
 from sklearn.base import TransformerMixin
 from sklearn.compose import ColumnTransformer
@@ -13,9 +14,7 @@ class OneHotColumnEncoder(TransformerMixin):
     """
 
     def __init__(self) -> None:
-        self.columns_to_encode = (
-            constants.CATEGORICAL_COLUMNS_TO_STANDARD_ENCODING
-        )
+        self.columns_to_encode = constants.STANDARD_CAT_COLUMNS
         self.column_transformer = ColumnTransformer(
             transformers=[
                 (
@@ -42,6 +41,7 @@ class OneHotColumnEncoder(TransformerMixin):
         one_hot_dataframe = pd.DataFrame(data=encoded_values, columns=columns)
         X = X.drop(columns=self.columns_to_encode)
         X = pd.concat([X, one_hot_dataframe], axis="columns")
+        print(X.shape)
         if y is not None:
             return X, y
         return X
@@ -57,4 +57,12 @@ class OneHotColumnEncoder(TransformerMixin):
                 f"{column}_{category}" for category in categories
             ]
             output_columns.extend(categories_for_column)
+        output_columns = list(
+            map(self._remove_forbidden_characters, output_columns)
+        )
         return output_columns
+
+    def _remove_forbidden_characters(self, string: str) -> str:
+        string = re.sub(",", "(COMMA)", string)
+        string = re.sub("<", "(LEQ)", string)
+        return string

@@ -5,6 +5,10 @@ from preprocessing.lib.dummy import DummyPipeline
 
 
 class FeatureSelectionFactory:
+    """
+    Factory of feature selection methods
+    """
+
     def __init__(self) -> None:
         self.encoding_methods = {
             "frufs": FRUFSAdapter,

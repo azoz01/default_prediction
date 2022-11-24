@@ -1,4 +1,3 @@
-from typing import Dict
 import logging
 from utils.parameters import (
     get_data_path,
@@ -13,12 +12,12 @@ logger = logging.getLogger(__name__)
 
 def main():
     logger.info("Started data reduction pipeline")
-    input_path: str = get_data_path("transformed_categorical_columns")
-    output_path: str = get_data_path("reduced")
-    serialized_transformer_output_path: str = (
+    input_path = get_data_path("transformed_categorical_columns")
+    output_path = get_data_path("reduced")
+    serialized_transformer_output_path = (
         get_preprocessing_path("serialized") / "data_reductor.pkl"
     )
-    parameters: Dict[str, str] = get_parameters("reduce_data")
+    parameters = get_parameters("reduce_data")
     method = parameters["method"]
     method_parameters = get_parameters(method)
     transformer = FeatureSelectionFactory().create_oversampler(

@@ -40,6 +40,8 @@ stages:
     - preprocessing/bin/transform_numerical_columns.py
     - preprocessing/lib/numerical/numerical_columns_preprocessing.py
     - utils
+    params:
+    - transform_numerical_columns
     outs:
     - ${paths.data.transformed_numerical_columns}
     - ${paths.preprocessing.serialized}/numerical_columns_transformer.pkl
@@ -86,44 +88,23 @@ stages:
     - ${paths.preprocessing.serialized}/data_reductor.pkl
 
   train_model:
-    cmd: python models/bin/train_model.py
+    cmd: python ${train_model.train_model_script_path}
     deps:
-    - ${train_model.study_input_path}
-    - models/bin/train_model.py
+    - ${train_model.train_model_script_path}
+    - ${paths.data.reduced}
     - utils
     params:
     - train_model
     outs:
-    - ${paths.models.serialized}/${train_model.model_name}.pkl
-    - ${paths.models.parameters}/${train_model.model_name}.json
-  train_gaussian_nb:
-    cmd: python models/custom_train/train_gaussian_nb.py
-    deps:
-    - models/custom_train/train_gaussian_nb.py
-    - utils
-    outs:
-    - ${paths.models.serialized}/gaussian_nb.pkl
-  train_lda:
-    cmd: python models/custom_train/train_lda.py
-    deps:
-    - models/custom_train/train_lda.py
-    - utils
-    outs:
-    - ${paths.models.serialized}/lda.pkl
-  train_neural_network:
-    cmd: python models/custom_train/train_neural_network.py
-    deps:
-    - models/custom_train/train_neural_network.py
-    - utils
-    outs:
-    - ${paths.models.serialized}/neural_network.pkl
+    - ${train_model.out_model_serialized_path}
+
   calibrate_model:
-    cmd: python models/bin/calibrate_model.py
+    cmd: python models/bin/utils/calibrate_model.py
     deps:
-    - ${paths.models.serialized}/xgboost.pkl
-    - models/bin/calibrate_model.py
+    - ${calibrate_model.model_input_path}
+    - models/bin/utils/calibrate_model.py
     - utils
     params:
     - calibrate_model
     outs:
-    - ${paths.models.serialized}/xgboost_calibrated.pkl
+    - ${calibrate_model.model_output_path}

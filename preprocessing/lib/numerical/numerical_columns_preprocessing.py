@@ -16,29 +16,46 @@ logger = logging.getLogger(__name__)
 
 
 class NumericalColumnsPreprocessor(TransformerMixin):
-    def __init__(self) -> None:
-        self.columns_to_sine_encode = constants.CYCLICAL_CATEGORICAL_COLUMNS
-        self.columns_to_cut_outliers = constants.COLUMNS_TO_CUT_OUTLIERS
-        self.columns_to_gaussian_transform = (
-            constants.COLUMNS_TO_GAUSSIAN_TRANSFORM
-        )
-        self.columns_to_min_max_scale = constants.COLUMNS_TO_MIN_MAX_SCALE
-        self.columns_to_standardize = constants.COLUMNS_TO_Z_SCORE_STANDARDIZE
-        self.transformed_columns = (
-            self.columns_to_cut_outliers
-            + self.columns_to_gaussian_transform
-            + self.columns_to_min_max_scale
-            + self.columns_to_standardize
-        )
-        self.standard_transformers = [
-            (self.columns_to_cut_outliers, OutliersCutter()),
+    """
+    1. Encodes cyclical columns to sin/cos columns
+    2. Cuts outliers
+    3. Reduces skewness using yeo-johnson transformation
+    4. Scales selected columns to [0-1] range
+    5. Standardize selected columns using z-score scaling
+    """
+
+    def __init__(
+        self, remove_skewness: bool = True, scale: bool = True
+    ) -> None:
+        self.columns_to_sine_encode = constants.COLUMNS_TO_CYCLICAL_ENCODING
+        self.columns_to_cut_outliers = constants.COLUMNS_TO_DROP_OUTLIERS
+        self.columns_to_gaussian_transform = constants.SKEWED_COLUMNS
+        self.columns_to_min_max_scale = constants.COLUMNS_TO_SCALE
+        self.columns_to_standardize = constants.COLUMNS_TO_STANDARDIZE
+
+        self.standard_transformers = []
+        self.standard_transformers.append(
             (
-                self.columns_to_gaussian_transform,
-                PowerTransformer(method="yeo-johnson"),
-            ),
-            (self.columns_to_min_max_scale, MinMaxScaler()),
-            (self.columns_to_standardize, StandardScaler()),
-        ]
+                self.columns_to_cut_outliers,
+                OutliersCutter(columns=self.columns_to_cut_outliers),
+            )
+        )
+        if remove_skewness:
+            self.standard_transformers.append(
+                (
+                    self.columns_to_gaussian_transform,
+                    PowerTransformer(method="yeo-johnson"),
+                )
+            )
+        if scale:
+            if len(self.columns_to_min_max_scale) != 0:
+                self.standard_transformers.append(
+                    (self.columns_to_min_max_scale, MinMaxScaler())
+                )
+            if len(self.columns_to_standardize) != 0:
+                self.standard_transformers.append(
+                    (self.columns_to_standardize, StandardScaler())
+                )
 
     def fit(
         self, X: pd.DataFrame, y: pd.DataFrame = None, **kwargs
