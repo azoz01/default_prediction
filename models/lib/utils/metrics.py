@@ -1,5 +1,5 @@
+from typing import Dict, Callable
 from pandas import DataFrame
-
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -9,8 +9,12 @@ from sklearn.metrics import (
 )
 
 
-def get_metrics(model, X: DataFrame, y_true: DataFrame):
-    y_pred = model.predict(X)
+def get_metrics(
+    model, X: DataFrame, y_true: DataFrame, predict_fun: Callable = None
+) -> Dict[str, float]:
+    if not predict_fun:
+        predict_fun = model.predict
+    y_pred = predict_fun(X)
     return {
         "accuracy": accuracy_score(y_true, y_pred),
         "f1_score": f1_score(y_true, y_pred),

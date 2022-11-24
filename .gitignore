@@ -6,5 +6,3 @@ data/raw/*
 !*.dvc
 secured
 api/test_api.py
-/abc
-/def

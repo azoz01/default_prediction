@@ -1,4 +1,0 @@
-outs:
-- md5: f06ace28343c62ff4de547068539748b
-  size: 22225867
-  path: application_data.parquet

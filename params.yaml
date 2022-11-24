@@ -6,32 +6,30 @@ paths:
     clean: "resources/data/clean"
     transformed_numerical_columns: "resources/data/transformed_numerical_columns"
     balanced: "resources/data/balanced"
-    transformed_categorical_columns: "resources/data/categorical_transformed"
+    transformed_categorical_columns: "resources/data/transformed_categorical_column"
     reduced: "resources/data/reduced"
     data_state: "resources/data/data_state.json"
-  pipelines:
-    serialized: "resources/pipelines/serialized"
-    studies: "resources/pipelines/studies"
-    parameters: "resources/pipelines/parameters"
+  preprocessing:
+    serialized: "resources/preprocessing/serialized"
+    studies: "resources/preprocessing/studies"
+    parameters: "resources/preprocessing/parameters"
   models:
     serialized: "resources/models/serialized"
     parameters: "resources/models/parameters"
     optuna_studies: "resources/models/studies"
+    final_model: "resources/final_model"
 
 split_data:
   random_state: 42
   test_size: 0.15
   valid_size: 0.15
 
-clean_data:
-  method: "model_based"
-
-model_based_imputation:
-  hyperparams_cat_dict_path: "resources/pipelines/parameters/hyperparams_cat_dict.json"
-  hyperparams_reg_dict_path: "resources/pipelines/parameters/hyperparams_num_dict.json"
+transform_numerical_columns:
+  remove_skewness: true
+  scale: true
 
 balance_data:
-  method: "oversample"
+  method: "smotenc"
 
 transform_categorical_columns:
   method: "one_hot"
@@ -41,23 +39,32 @@ category_embedding:
   embedder_num_layers: 2
 
 reduce_data:
-  method: "rfe"
+  method: "passthrough"
 
 frufs:
-  output_n_cols: 200
+  output_n_cols: 50
 
 rfe:
-  output_n_cols: 200
+  output_n_cols: 50
 
 train_model:
-  study_input_path: "resources/models/studies/xgboost/xgboost-2022-10-20-22_10_35.db"
-  model_name: "xgboost"
-  model_difference_threshold: 0.02
-  model_class: "xgboost"
-  data_path: "reduced"
+  train_model_script_path: "models/bin/training/train_xgboost.py"
+  out_model_serialized_path: "resources/models/serialized/xgboost.pkl"
 
 calibrate_model:
-  model_input_path: "resources/models/serialized/xgboost.pkl"
-  data_path: "reduced"
+  data_path: reduced
+  calibration_method: isotonic
+  model_input_path: resources/models/serialized/xgboost.pkl
   model_output_path: resources/models/serialized/xgboost_calibrated.pkl
-  calibration_method: "isotonic"
+
+build_final_model:
+  pipelines:
+    - resources/preprocessing/serialized/initial_preprocessor.pkl
+    - resources/preprocessing/serialized/imputer.pkl
+    - resources/preprocessing/serialized/numerical_columns_transformer.pkl
+    - resources/preprocessing/serialized/categorical_columns_transformer.pkl
+    - resources/preprocessing/serialized/data_reductor.pkl
+  model: resources/models/serialized/xgboost_calibrated.pkl
+  output_path: resources/models/final/model.pkl
+  publish_experiment_id: 3
+

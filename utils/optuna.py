@@ -1,38 +1,33 @@
-from typing import List, Dict, Any
+from typing import Dict, Any
 import optuna
 import numpy as np
 
 
 def get_best_trial_params_cat(
-    study: optuna.Study, model_difference_threshold=0.05
+    study: optuna.Study, model_difference_threshold: float = 0.05
 ) -> Dict[str, Any]:
+    """
+    Returns best trial's params from optuna study.
+    Selects trial with best score with difference
+    lower than specified threshold. Applies to classification
+    models
 
-    trials: List = list(
+    Args:
+        study (optuna.Study): optuna study
+        model_difference_threshold (float, optional):
+            threshold of score difference between samples. Defaults to 0.05.
+
+    Returns:
+        Dict[str, Any]: params of best trial
+    """
+    trials = study.trials
+    trials_filtered = list(
         filter(
-            lambda trial: trial.values[1] < model_difference_threshold,
-            study.trials,
+            lambda trial: trial.values[1] < model_difference_threshold, trials,
         ),
     )
-    metrics: List[float] = [trial.values[0] for trial in trials]
-    max_metric_index: int = np.argmax(metrics)
+    if len(trials_filtered) != 0:
+        trials = trials_filtered
+    metrics = [trial.values[0] for trial in trials]
+    max_metric_index = np.argmax(metrics)
     return trials[max_metric_index].params
-
-
-def get_best_trial_params_reg(study) -> Dict[str, Any]:
-    diffs: List[float] = list(map(lambda trial: trial.values[1], study.trials))
-    trials_with_lowest_diff_idx: np.ndarray[int] = np.argsort(diffs)[
-        : int(0.3 * len(diffs))
-    ]
-    trials_with_lowest_diff: np.ndarray = np.array(study.trials)
-    trials_with_lowest_diff = trials_with_lowest_diff[
-        trials_with_lowest_diff_idx
-    ]
-    mses: List[float] = list(
-        map(lambda trial: trial.values[0], trials_with_lowest_diff)
-    )
-    trial_with_lowest_mse_idx: int = np.argmin(mses)
-    best_trial: optuna.Trial = trials_with_lowest_diff[
-        trial_with_lowest_mse_idx
-    ]
-    params: Dict[str, Any] = best_trial.params
-    return params
