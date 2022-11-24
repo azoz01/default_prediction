@@ -27,6 +27,7 @@ it requires more complex business analysis which I cannot perform without more d
 |Logistic regression|0.65|0.65|0.61|0.67|
 |LDA|0.54|0.54|0.11|0.8|
 |Naive Bayes|0.61|0.61|0.4|0.75|
+
 ![image](img/models_plot.png)
 _When model doesn't differ significantly between train and test sample in ROC AUC, I consider it as not overfitted._
 
