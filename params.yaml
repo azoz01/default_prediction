@@ -1,0 +1,70 @@
+paths:
+  data:
+    raw: "resources/data/raw"
+    splitted: "resources/data/splitted"
+    initially_preprocessed: "resources/data/initially_preprocessed"
+    clean: "resources/data/clean"
+    transformed_numerical_columns: "resources/data/transformed_numerical_columns"
+    balanced: "resources/data/balanced"
+    transformed_categorical_columns: "resources/data/transformed_categorical_column"
+    reduced: "resources/data/reduced"
+    data_state: "resources/data/data_state.json"
+  preprocessing:
+    serialized: "resources/preprocessing/serialized"
+    studies: "resources/preprocessing/studies"
+    parameters: "resources/preprocessing/parameters"
+  models:
+    serialized: "resources/models/serialized"
+    parameters: "resources/models/parameters"
+    optuna_studies: "resources/models/studies"
+    final_model: "resources/final_model"
+
+split_data:
+  random_state: 42
+  test_size: 0.15
+  valid_size: 0.15
+
+transform_numerical_columns:
+  remove_skewness: true
+  scale: true
+
+balance_data:
+  method: "smotenc"
+
+transform_categorical_columns:
+  method: "one_hot"
+
+category_embedding:
+  embedder_n_epochs: 5
+  embedder_num_layers: 2
+
+reduce_data:
+  method: "passthrough"
+
+frufs:
+  output_n_cols: 50
+
+rfe:
+  output_n_cols: 50
+
+train_model:
+  train_model_script_path: "models/bin/training/train_xgboost.py"
+  out_model_serialized_path: "resources/models/serialized/xgboost.pkl"
+
+calibrate_model:
+  data_path: reduced
+  calibration_method: isotonic
+  model_input_path: resources/models/serialized/xgboost.pkl
+  model_output_path: resources/models/serialized/xgboost_calibrated.pkl
+
+build_final_model:
+  pipelines:
+    - resources/preprocessing/serialized/initial_preprocessor.pkl
+    - resources/preprocessing/serialized/imputer.pkl
+    - resources/preprocessing/serialized/numerical_columns_transformer.pkl
+    - resources/preprocessing/serialized/categorical_columns_transformer.pkl
+    - resources/preprocessing/serialized/data_reductor.pkl
+  model: resources/models/serialized/xgboost_calibrated.pkl
+  output_path: resources/models/final/model.pkl
+  publish_experiment_id: 3
+

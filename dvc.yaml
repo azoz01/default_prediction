@@ -1,0 +1,121 @@
+stages:
+
+  initial_preprocessing:
+    cmd: python preprocessing/bin/initial_preprocessing.py
+    deps:
+    - ${paths.data.raw}
+    - preprocessing/bin/initial_preprocessing.py
+    - preprocessing/lib/cleaning/initial_preprocessing.py
+    - utils
+    outs:
+    - ${paths.data.initially_preprocessed}/loan.parquet
+    - ${paths.preprocessing.serialized}/initial_preprocessor.pkl
+
+  split:
+    cmd: python preprocessing/bin/split.py
+    deps:
+    - ${paths.data.initially_preprocessed}
+    - preprocessing/bin/split.py
+    - utils
+    params:
+    - split_data
+    outs:
+    - ${paths.data.splitted}
+
+  impute:
+    cmd: python preprocessing/bin/impute.py
+    deps:
+    - ${paths.data.splitted}
+    - preprocessing/bin/impute.py
+    - preprocessing/lib/cleaning/imputation.py
+    - utils
+    outs:
+    - ${paths.data.clean}
+    - ${paths.preprocessing.serialized}/imputer.pkl
+
+  transform_numerical_columns:
+    cmd: python preprocessing/bin/transform_numerical_columns.py
+    deps:
+    - ${paths.data.clean}
+    - preprocessing/bin/transform_numerical_columns.py
+    - preprocessing/lib/numerical/numerical_columns_preprocessing.py
+    - utils
+    params:
+    - transform_numerical_columns
+    outs:
+    - ${paths.data.transformed_numerical_columns}
+    - ${paths.preprocessing.serialized}/numerical_columns_transformer.pkl
+
+  balance:
+    cmd: python preprocessing/bin/balance.py
+    deps:
+    - ${paths.data.transformed_numerical_columns}
+    - preprocessing/bin/balance.py
+    - preprocessing/lib/balance_data
+    - utils
+    params:
+    - balance_data
+    outs:
+    - ${paths.data.balanced}
+
+  transform_categorical_columns:
+    cmd: python preprocessing/bin/transform_categorical_columns.py
+    deps:
+    - ${paths.data.balanced}
+    - preprocessing/bin/transform_categorical_columns.py
+    - preprocessing/lib/categorical
+    - utils
+    params:
+    - category_embedding
+    - transform_categorical_columns
+    outs:
+    - ${paths.data.transformed_categorical_columns}
+    - ${paths.preprocessing.serialized}/categorical_columns_transformer.pkl
+
+  reduce:
+    cmd: python preprocessing/bin/reduce.py
+    deps:
+    - preprocessing/bin/reduce.py
+    - preprocessing/lib/feature_selection
+    - ${paths.data.transformed_categorical_columns}
+    - utils
+    params:
+    - frufs
+    - rfe
+    - reduce_data.method
+    outs:
+    - ${paths.data.reduced}
+    - ${paths.preprocessing.serialized}/data_reductor.pkl
+
+  train_model:
+    cmd: python ${train_model.train_model_script_path}
+    deps:
+    - ${train_model.train_model_script_path}
+    - ${paths.data.reduced}
+    - utils
+    params:
+    - train_model
+    outs:
+    - ${train_model.out_model_serialized_path}
+
+  calibrate_model:
+    cmd: python models/bin/utils/calibrate_model.py
+    deps:
+    - ${calibrate_model.model_input_path}
+    - models/bin/utils/calibrate_model.py
+    - utils
+    params:
+    - calibrate_model
+    outs:
+    - ${calibrate_model.model_output_path}
+  build_final_model:
+    cmd: python models/bin/utils/build_final_model.py
+    deps:
+    - ${calibrate_model.model_output_path}
+    - ${paths.preprocessing.serialized}
+    - models/bin/utils/build_final_model.py
+    - utils
+    params:
+    - build_final_model
+    outs:
+    - resources/models/final/model.pkl

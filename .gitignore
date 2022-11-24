@@ -1,0 +1,8 @@
+.vscode/*
+data/raw/*
+!.keep
+*.parquet
+*__pycache__*
+!*.dvc
+secured
+api/test_api.py
