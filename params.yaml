@@ -35,7 +35,7 @@ transform_categorical_columns:
   method: "one_hot"
 
 category_embedding:
-  embedder_n_epochs: 5
+  embedder_n_epochs: 4
   embedder_num_layers: 2
 
 reduce_data:
