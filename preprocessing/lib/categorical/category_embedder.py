@@ -6,7 +6,7 @@ import torch.nn as nn
 from typing import List, Tuple, Union
 from sklearn.base import TransformerMixin
 import pandas as pd
-from imblearn.over_sampling import RandomOverSampler
+from fastai.tabular.all import *
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,6 @@ class CategoryEmbedder(TransformerMixin):
     def __init__(
         self, embedder_n_epochs: int, embedder_num_layers: int
     ) -> None:
-        raise NotImplementedError("Now usage of category embedder is disables")
         self.embedder_n_epochs = embedder_n_epochs
         self.embedder_num_layers = embedder_num_layers
 
@@ -34,9 +33,8 @@ class CategoryEmbedder(TransformerMixin):
             y (pd.DataFrame): y to fit
         """
         X = self._categorize_categorical_variables(X)
-        X, y = self._resample_data(X, y)
         tabular_pandas = self._get_tabular_pandas(
-            X=X, y=y, target_name="TARGET"
+            X=X, y=y, target_name="loan_status"
         )
         self.nn_model = self._prepare_nn_model(tabular_pandas=tabular_pandas)
         self._fit_nn_model(
@@ -86,31 +84,13 @@ class CategoryEmbedder(TransformerMixin):
         ].astype("category")
         return X
 
-    def _resample_data(
-        self, X: pd.DataFrame, y: pd.DataFrame
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-        """
-        Makes data perfectly balanced by oversampling minority class
-
-        Args:
-            X (pd.DataFrame): X to resample
-            y (pd.DataFrame): y to resample
-
-        Returns:
-            Tuple[pd.DataFrame, pd.DataFrame]: Resampled data
-        """
-        logger.info("Resampling data")
-        ros = RandomOverSampler()
-        X_resampled, y_resampled = ros.fit_resample(X, y)
-        return X_resampled, y_resampled
-
     def _get_tabular_pandas(
         self,
         X: pd.DataFrame,
         y: pd.DataFrame = None,
         target_name: str = None,
         valid_sample_frac: float = 0.3,
-    ) -> fastai.tabular.all.TabularPandas:
+    ) -> TabularPandas:
         """
         Converts pandas pd.DataFrame to TabularPandas from fastai. If y
         is passed, then X and y are concatenated and y is treated
@@ -139,9 +119,9 @@ class CategoryEmbedder(TransformerMixin):
             include=["float64"]
         ).columns.values.tolist()
 
-        tabular_pandas = fastai.tabular.all.TabularDataLoaders.from_df(
+        tabular_pandas = TabularDataLoaders.from_df(
             df,
-            procs=[fastai.tabular.all.Categorify],
+            procs=[Categorify],
             cat_names=categorical_columns,
             cont_names=continuous_columns,
             y_names=target_name,
@@ -152,9 +132,7 @@ class CategoryEmbedder(TransformerMixin):
 
         return tabular_pandas
 
-    def _prepare_nn_model(
-        self, tabular_pandas: fastai.tabular.all.TabularPandas
-    ) -> fastai.tabular.all.Learner:
+    def _prepare_nn_model(self, tabular_pandas: TabularPandas) -> Learner:
         """
         Prepares Learner object using passed tabular_pandas.
         Underlying neural network is prepared using heuristic.
@@ -166,9 +144,7 @@ class CategoryEmbedder(TransformerMixin):
         Returns:
             Learner: object ready for fit
         """
-        num_embeddings = sum(
-            n for _, n in fastai.tabular.all.get_emb_sz(tabular_pandas)
-        )
+        num_embeddings = sum(n for _, n in get_emb_sz(tabular_pandas))
         num_classes = tabular_pandas.ys.nunique().values[0]
         continuous_columns = tabular_pandas.cont_names
         layers = self._get_default_nn_layers(
@@ -177,16 +153,16 @@ class CategoryEmbedder(TransformerMixin):
             num_outputs=num_classes,
             num_layers=self.embedder_num_layers,
         )
-        config = fastai.tabular.all.tabular_config(
+        config = tabular_config(
             ps=[0.001] + (self.embedder_num_layers - 1) * [0.01], embed_p=0.04
         )
 
-        nn_model = fastai.tabular.all.tabular_learner(
+        nn_model = tabular_learner(
             dls=tabular_pandas,
             layers=layers,
             config=config,
-            loss_func=fastai.tabular.all.CrossEntropyLossFlat(),
-            metrics=fastai.tabular.all.accuracy,
+            loss_func=CrossEntropyLossFlat(),
+            metrics=RocAucBinary(),
             n_out=num_classes,
         )
 
@@ -232,9 +208,7 @@ class CategoryEmbedder(TransformerMixin):
         nn_model.fit_one_cycle(n_epoch=embedder_n_epochs, lr_max=valley)
 
     def _embed_features(
-        self,
-        learner: fastai.tabular.all.Learner,
-        tabular_pandas: fastai.tabular.all.TabularPandas,
+        self, learner: Learner, tabular_pandas: TabularPandas,
     ) -> pd.DataFrame:
         """
         Method used for category embedding. Extracts proper row from
@@ -257,7 +231,7 @@ class CategoryEmbedder(TransformerMixin):
         for i, col in enumerate(xs_cat.columns):
             embeddings: nn.Embedding = learner.model.embeds[i]
             embedding_data: torch.Tensor = embeddings(
-                fastai.tabular.all.tensor(xs_cat[col], dtype=torch.int64)
+                tensor(xs_cat[col], dtype=torch.int64)
             )
             embedding_names: List[str] = [
                 f"{col}_{j}" for j in range(embedding_data.shape[1])
