@@ -75,8 +75,6 @@ Environment variables. Because of security I don't publish MLFlow server IP here
 └── utils - utilities like handling DVC parameters or I/O operations
 ```
 
-## TODO:
-* Add more models
 ## Reference
 [1] https://arxiv.org/pdf/1106.1813
 
